@@ -48,7 +48,7 @@ CREATE TABLE pedido (
     -- FK hacia cliente (participación total: NOT NULL)
     -- RESTRICT evita borrar un cliente si ya tiene pedidos registrados por auditoría contable
     cliente_id BIGINT NOT NULL REFERENCES cliente(id) ON DELETE RESTRICT,
-    fecha TIMESTAMPTZ NOT NULL DEFAULT now(),
+    fecha TIMESTAMPTZ NOT NULL DEFAULT now() CHECK (fecha <= now()),
     total NUMERIC(12, 2) NOT NULL DEFAULT 0.00 CHECK (total >= 0),
     estado estado_pedido NOT NULL DEFAULT 'pendiente',
     forma_pago metodo_pago NOT NULL
@@ -65,7 +65,8 @@ CREATE TABLE detalle_pedido (
     producto_id BIGINT NOT NULL REFERENCES producto(id) ON DELETE RESTRICT,
     -- CHECK 3: cantidad debe ser estrictamente mayor a cero
     cantidad INTEGER NOT NULL CHECK (cantidad > 0),
-    precio_unitario NUMERIC(12, 2) NOT NULL CHECK (precio_unitario >= 0),
+    -- CHECK 4: precio_unitario debe ser estrictamente mayor a cero
+    precio_unitario NUMERIC(12, 2) NOT NULL CHECK (precio_unitario > 0),
     
     -- Clave primaria compuesta
     PRIMARY KEY (pedido_id, producto_id)
