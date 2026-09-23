@@ -1,3 +1,23 @@
+# Informe de Reglas de Negocio (Parte 1)
+
+## 1. Las reglas elegidas
+Para esta parte del trabajo, agarré dos reglas de negocio para validarlas directamente en el motor y no depender de que la aplicación lo ataje:
+* **Fecha lógica:** En la tabla `pedido`, la fecha de carga no puede ser del futuro (`fecha <= now()`).
+* **Precio real:** En la tabla `detalle_pedido`, el `precio_unitario` tiene que ser estrictamente mayor a cero (antes el esquema dejaba pasar un 0).
+
+## 2. Cómo se hizo con la IA
+Le pedí a OpenCode (con el modelo muse-spark-1.3) que me agregue estos dos CHECKs en el archivo `Script.sql`, pero le aclaré que respete los pasos de nuestro `protocolo_seguridad.md` para no hacer lío. 
+
+El agente revisó el código en modo Plan y me tiró dos alternativas: la "Opción A", que era meter el CHECK en la misma línea de la columna (siguiendo el estilo que ya traía el script), o la "Opción B", que era hacerlo aparte con un `ALTER TABLE` poniéndole un nombre específico al error. Le confirmé que avanzara con la Opción A para mantener la prolijidad del código que ya teníamos, y de paso actualizó unos comentarios viejos que habían quedado desactualizados.
+
+## 3. Pruebas y verificación en el motor
+Para cumplir con el protocolo de la cátedra de no romper nada, abrí un bloque `BEGIN;` en la copia de trabajo de la base de datos y corrí el script modificado. 
+
+* Primero probé hacer un `INSERT` de un pedido usando la fecha de hoy, y me lo tomó perfecto. 
+* Después quise forzar el error y mandé un `INSERT` con una fecha del año 2099. El motor lo rebotó al toque y saltó el error por violación de la restricción CHECK, así que la validación quedó andando de diez. Terminé inspeccionando los mensajes y cerrando la transacción.
+
+
+
 # DUIA - CHECKs fecha no futura y precio_unitario positivo
 
 ## Herramienta
