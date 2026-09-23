@@ -102,3 +102,9 @@ UNION ALL
 SELECT 'pedido', count(*) FROM pedido
 UNION ALL
 SELECT 'detalle_pedido', count(*) FROM detalle_pedido;
+
+EXPLAIN ANALYZE
+SELECT id, fecha, total, estado 
+FROM pedido 
+WHERE cliente_id = 12450 
+  AND fecha >= now() - interval '90 days';
