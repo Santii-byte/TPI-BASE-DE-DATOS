@@ -108,5 +108,3 @@ SELECT id, fecha, total, estado
 FROM pedido 
 WHERE cliente_id = 12450 
   AND fecha >= now() - interval '90 days';
-
-ROLLBACK;
