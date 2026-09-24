@@ -73,3 +73,16 @@ SELECT
     100.00
 FROM generate_series(1, 10000)
 ON CONFLICT DO NOTHING;
+
+
+-- Medición de inserción masiva (10.000 filas)
+
+-- Tomar tiempo de inserción
+INSERT INTO detalle_pedido (pedido_id, producto_id, cantidad, precio_unitario)
+SELECT 
+    (1 + floor(random() * 100000))::BIGINT,
+    (1 + floor(random() * 40000))::BIGINT,
+    1,
+    100.00
+FROM generate_series(1, 10000)
+ON CONFLICT DO NOTHING;
