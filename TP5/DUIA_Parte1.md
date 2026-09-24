@@ -20,7 +20,7 @@ Spec implementada en `TP3/` (sin commit, como exige tu protocolo).
 **Medición de escritura (`TP3/medicion_escritura.sql`):** dos tablas espejo (con/sin el covering de C), mismo lote reproducible de 10k filas (`setseed`), `EXPLAIN (ANALYZE)` en ambos `INSERT`, comparativa de tamaños con `pg_relation_size` y limpieza final. Solo en copia aislada. Criterio de lectura incluido: si el sobrecosto es < 10-15% y C se usa a diario, el trade-off justifica el índice. Documentado en `TP3/DUIA_Parte15.md`, con verificación pendiente para que la rellenes vos.
 
 ## Qué se aceptó
-Archivos entregados (`optimizacion_consultas_food_store.sql`, `medicion_escritura.sql`), más este DUIA en `TP3/DUIA_Parte15.md`. Sin commits por parte de la herramienta (los hace el usuario).
+Archivos entregados (`indices.sql`, `medicion_escritura.sql`), más este DUIA en `TP5/DUIA_Parte1.md`. Sin commits por parte de la herramienta (los hace el usuario).
 
 ## Qué se modificó o descartó y por qué
 -
