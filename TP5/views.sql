@@ -30,3 +30,4 @@ SELECT
     pr.nombre AS producto_nombre
 FROM public.detalle_pedido dp
 JOIN public.producto pr ON dp.producto_id = pr.id;
+
