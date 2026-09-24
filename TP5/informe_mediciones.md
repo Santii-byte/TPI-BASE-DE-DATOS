@@ -148,5 +148,20 @@ Execution Time: 151.994 ms
 
 
 
+## Parte C: Vista Materializada
+
+**Reporte elegido:** Recaudación mensual y unidades vendidas por producto.
+
+*   **Tiempo de ejecución de la consulta original sin materializar:** 726.968 ms.
+*   **Tiempo de ejecución consultando la vista materializada:** 17.015 ms.
+
+**Frecuencia de refresco justificada:**
+Dado que este es un reporte analítico de ventas históricas, no se requiere precisión en tiempo real (milisegundos). Se sugiere programar un `REFRESH MATERIALIZED VIEW CONCURRENTLY` una vez al día (por ejemplo, a las 03:00 AM) o como máximo cada hora. 
+**Implicancia para los usuarios:** Los usuarios de negocio que consulten este reporte verán la "foto" de las ventas hasta el último refresco. Si un pedido nuevo ingresa, no se reflejará en los totales hasta la próxima ejecución del proceso. A cambio de esta ligera desactualización (estipulada por negocio), el sistema se ahorra recalcular toda la historia de transacciones, liberando recursos críticos del motor para las operaciones OLTP (ventas en vivo).
+
+
+
+
+
 
 
