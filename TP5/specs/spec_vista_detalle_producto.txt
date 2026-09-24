@@ -1,0 +1,4 @@
+# spec: vista_detalle_producto
+Objetivo: Reporte del detalle de un pedido junto con la descripción del producto.
+Definición: Unir la tabla detalle_pedido con la tabla producto.
+Columnas a exponer: pedido_id, cantidad, precio_unitario, y el nombre del producto (como producto_nombre).

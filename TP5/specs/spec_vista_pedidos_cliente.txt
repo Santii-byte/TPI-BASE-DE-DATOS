@@ -1,0 +1,5 @@
+# spec: vista_pedidos_cliente
+Objetivo: Reporte de pedidos con los datos del usuario que realizó la compra, aplicando el criterio de seguridad visto en la teoría.
+Definición: Unir la tabla de pedidos con la de clientes.
+Columnas a exponer: id del pedido, fecha, total, estado, id del cliente y nombre del cliente.
+Criterio de seguridad: Se deben ocultar explícitamente las columnas `email` y `telefono` del cliente, de modo que se pueda otorgar permisos de SELECT sobre esta vista sin exponer datos de contacto privados.

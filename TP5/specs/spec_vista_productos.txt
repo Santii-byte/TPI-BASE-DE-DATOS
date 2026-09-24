@@ -1,0 +1,5 @@
+# spec: vista_productos_vigentes
+Objetivo: Simplificar el reporte de productos disponibles para la venta.
+Definición: Se necesita una vista que exponga los productos, pero filtrando únicamente aquellos que están activos.
+Columnas a exponer: id, nombre, precio, stock.
+Filtro: activo = true.
