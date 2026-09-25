@@ -1,0 +1,51 @@
+Unidad 1: Trabajo Práctico 1 (Diseño y Estructura Inicial)
+Qué elementos implementé en cada unidad:
+Diseñé e implementé el modelo relacional del dominio "Food Store". Esto incluyó la creación del esquema principal (schema.sql) con las tablas fundamentales, la definición de tipos de datos correspondientes, y el establecimiento de Claves Primarias (PK) y Claves Foráneas (FK).
+
+Cómo probé su funcionamiento:
+Ejecuté el script de creación desde cero en el motor de base de datos para verificar que no hubiese errores de sintaxis ni dependencias circulares. Luego, realicé inserciones manuales (dummy data) intentando violar las restricciones intencionalmente.
+
+Qué resultados obtuve:
+El esquema se instanció con éxito. Las restricciones de integridad (constraints) funcionaron correctamente, bloqueando inserciones con FKs inexistentes o valores nulos en campos obligatorios, garantizando una base sólida.
+
+Qué consultas optimicé y qué diferencias encontré antes y después:
+Al ser la etapa inicial (DDL), la "optimización" se centró en la estructura. Antes: Tenía tipos de datos excesivamente grandes (ej. VARCHAR(255) para todo). Después: Ajusté los tipos de datos (INT, DECIMAL, VARCHAR con límites justos), lo que optimizó el espacio de almacenamiento por fila y mejoró teóricamente la velocidad de lectura futura.
+
+Unidad 2: Trabajo Práctico 2 (Concurrencia y Reglas de Negocio)
+Qué elementos implementé en cada unidad:
+Implementé el control de concurrencia mediante el uso de transacciones (BEGIN, COMMIT, ROLLBACK), definición de niveles de aislamiento y creación de Triggers/Procedimientos Almacenados (Script.sql) para hacer cumplir las reglas de negocio críticas del local (ej. validación de stock al vender).
+
+Cómo probé su funcionamiento:
+Abrí múltiples sesiones/conexiones simultáneas simulando a varios usuarios intentando comprar o modificar el mismo producto al mismo tiempo para forzar colisiones.
+
+Qué resultados obtuve:
+Logré prevenir anomalías como "lecturas sucias" (dirty reads) y "actualizaciones perdidas" (lost updates). Los Triggers actuaron como barrera de seguridad, abortando transacciones que dejaban el stock en negativo.
+
+Qué consultas optimicé y qué diferencias encontré antes y después:
+Optimicé las transacciones para reducir los tiempos de bloqueo (locks). Antes: Transacciones muy largas bloqueaban la tabla entera, generando timeouts en otras sesiones. Después: Refactoricé el código para que las transacciones sean lo más cortas posibles y apliquen bloqueos a nivel de fila (Row-Level Locks). La diferencia fue una reducción casi total de las esperas entre transacciones concurrentes.
+
+Unidad 3: Trabajo Práctico 3 (Carga Masiva y Lógica Avanzada)
+Qué elementos implementé en cada unidad:
+Desarrollé scripts dedicados a la importación masiva de datos (carga_masiva.sql) para poblar la base de datos con miles de registros de forma automatizada, probando el rendimiento del sistema a escala real.
+
+Cómo probé su funcionamiento:
+Ejecuté los scripts de carga masiva midiendo el tiempo cronometrado desde el inicio hasta el final de la ingesta de datos, y monitoreando si el motor arrojaba errores de memoria o tiempo de espera.
+
+Qué resultados obtuve:
+Se logró poblar la base de datos con éxito, preparándola para realizar consultas realistas. Sin embargo, inicialmente detecté cuellos de botella importantes durante las inserciones masivas.
+
+Qué consultas optimicé y qué diferencias encontré antes y después:
+Optimicé drásticamente los scripts de INSERT. Antes: Las inserciones se realizaban fila por fila y los índices/triggers se recalculaban por cada registro, lo que tardaba varios minutos. Después: Agrupé las inserciones en lotes (Bulk Inserts) y, de manera controlada, deshabilité la actualización de índices durante la carga para reconstruirlos al final. La diferencia fue abismal: el tiempo de carga masiva bajó de minutos a unos pocos segundos.
+
+Unidad 4: Trabajo Práctico 4 (Consultas Complejas y Modularización)
+Qué elementos implementé en cada unidad:
+Implementé scripts fuertemente modularizados (Parte1.sql a Parte4_1.sql) que contienen consultas analíticas complejas, utilizando múltiples JOINs, subconsultas, agrupamientos (GROUP BY, HAVING) y funciones de agregación para generar reportes del negocio.
+
+Cómo probé su funcionamiento:
+Ejecuté las consultas contra la base de datos poblada masivamente en el TP3. Utilicé la herramienta EXPLAIN / EXPLAIN ANALYZE del motor de base de datos para diseccionar los planes de ejecución de cada script y ver dónde el motor "sufría" más.
+
+Qué resultados obtuve:
+Obtuve resultados precisos y consistentes para los reportes de ventas y productos. El análisis de los planes de ejecución evidenció inicialmente varios escaneos completos de tablas (Full Table Scans) que penalizaban el rendimiento.
+
+Qué consultas optimicé y qué diferencias encontré antes y después:
+Optimicé los reportes complejos. Antes: Una consulta que calculaba el total de ventas por categoría usando subconsultas correlacionadas tardaba mucho por tener que evaluar la subconsulta por cada fila resultante. Después: Reescribí la consulta utilizando CTEs (Common Table Expressions) y INNER JOINs directos, además de crear índices específicos en las claves foráneas más utilizadas (ej. categoria_id). La diferencia fue una caída en el "costo" del plan de ejecución superior al 80%, devolviendo los resultados de forma casi instantánea a pesar del gran volumen de datos.
