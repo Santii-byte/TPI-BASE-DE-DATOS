@@ -1,0 +1,75 @@
+SET
+                                                                                                QUERY PLAN                                                                                                 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=22753.08..22753.09 rows=5 width=46) (actual time=219.407..226.663 rows=5 loops=1)
+   Buffers: shared hit=8999 read=502
+   ->  Sort  (cost=22753.08..22753.23 rows=60 width=46) (actual time=219.405..226.660 rows=5 loops=1)
+         Sort Key: (sum(dp.subtotal)) DESC
+         Sort Method: top-N heapsort  Memory: 25kB
+         Buffers: shared hit=8999 read=502
+         ->  Finalize GroupAggregate  (cost=22736.43..22752.08 rows=60 width=46) (actual time=219.242..226.620 rows=59 loops=1)
+               Group Key: c.nombre
+               Buffers: shared hit=8996 read=502
+               ->  Gather Merge  (cost=22736.43..22750.43 rows=120 width=46) (actual time=219.233..226.529 rows=163 loops=1)
+                     Workers Planned: 2
+                     Workers Launched: 2
+                     Buffers: shared hit=8996 read=502
+                     ->  Sort  (cost=21736.41..21736.56 rows=60 width=46) (actual time=194.987..194.993 rows=54 loops=3)
+                           Sort Key: c.nombre
+                           Sort Method: quicksort  Memory: 30kB
+                           Buffers: shared hit=8996 read=502
+                           Worker 0:  Sort Method: quicksort  Memory: 30kB
+                           Worker 1:  Sort Method: quicksort  Memory: 30kB
+                           ->  Partial HashAggregate  (cost=21733.88..21734.63 rows=60 width=46) (actual time=194.907..194.929 rows=54 loops=3)
+                                 Group Key: c.nombre
+                                 Batches: 1  Memory Usage: 48kB
+                                 Buffers: shared hit=8980 read=502
+                                 Worker 0:  Batches: 1  Memory Usage: 48kB
+                                 Worker 1:  Batches: 1  Memory Usage: 48kB
+                                 ->  Hash Join  (cost=9645.19..21180.28 rows=110720 width=21) (actual time=21.881..160.274 rows=133478 loops=3)
+                                       Hash Cond: (pr.categoria_id = c.id)
+                                       Buffers: shared hit=8980 read=502
+                                       ->  Parallel Hash Join  (cost=9642.84..20866.77 rows=110720 width=15) (actual time=21.362..138.299 rows=133478 loops=3)
+                                             Hash Cond: (dp.producto_id = pr.id)
+                                             Buffers: shared hit=8947 read=502
+                                             ->  Parallel Hash Join  (cost=7377.07..18310.34 rows=110720 width=15) (actual time=13.032..100.533 rows=133478 loops=3)
+                                                   Hash Cond: (dp.pedido_id = ped.id)
+                                                   Buffers: shared hit=7343 read=502
+                                                   ->  Parallel Seq Scan on detalle_pedido dp  (cost=0.00..10058.27 rows=333327 width=23) (actual time=0.025..37.733 rows=266662 loops=3)
+                                                         Filter: (NOT eliminado)
+                                                         Buffers: shared hit=6224 read=501
+                                                   ->  Parallel Hash  (cost=6858.06..6858.06 rows=41521 width=8) (actual time=12.336..12.337 rows=33405 loops=3)
+                                                         Buckets: 131072  Batches: 1  Memory Usage: 4960kB
+                                                         Buffers: shared hit=1119 read=1
+                                                         ->  Parallel Bitmap Heap Scan on pedido ped  (cost=1861.84..6858.06 rows=41521 width=8) (actual time=1.332..5.924 rows=33405 loops=3)
+                                                               Recheck Cond: ((fecha >= CURRENT_DATE) AND (fecha < (CURRENT_DATE + 1)) AND (NOT eliminado))
+                                                               Heap Blocks: exact=620
+                                                               Buffers: shared hit=1119 read=1
+                                                               ->  Bitmap Index Scan on idx_pedido_fecha_eliminado  (cost=0.00..1836.93 rows=99650 width=0) (actual time=2.511..2.511 rows=100215 loops=1)
+                                                                     Index Cond: ((fecha >= CURRENT_DATE) AND (fecha < (CURRENT_DATE + 1)))
+                                                                     Buffers: shared hit=85 read=1
+                                             ->  Parallel Hash  (cost=1898.12..1898.12 rows=29412 width=16) (actual time=8.213..8.214 rows=16667 loops=3)
+                                                   Buckets: 65536  Batches: 1  Memory Usage: 2880kB
+                                                   Buffers: shared hit=1604
+                                                   ->  Parallel Seq Scan on producto pr  (cost=0.00..1898.12 rows=29412 width=16) (actual time=0.901..13.353 rows=50000 loops=1)
+                                                         Buffers: shared hit=1604
+                                       ->  Hash  (cost=1.60..1.60 rows=60 width=22) (actual time=0.488..0.488 rows=60 loops=3)
+                                             Buckets: 1024  Batches: 1  Memory Usage: 12kB
+                                             Buffers: shared hit=3
+                                             ->  Seq Scan on categoria c  (cost=0.00..1.60 rows=60 width=22) (actual time=0.462..0.468 rows=60 loops=3)
+                                                   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=414 read=6 dirtied=1
+ Planning Time: 7.448 ms
+ Execution Time: 226.875 ms
+(61 filas)
+
+  categoria   | total_vendido 
+--------------+---------------
+ Categoría 36 | 1795685625.50
+ Categoría 59 | 1303279026.43
+ Categoría 52 |  214415704.79
+ Categoría 33 |  195720272.09
+ Categoría 21 |     118407.74
+(5 filas)
+

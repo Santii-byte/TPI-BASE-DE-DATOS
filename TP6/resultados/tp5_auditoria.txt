@@ -1,0 +1,10 @@
+SET
+ categoria_id | fecha | total_fuente | total_resumen | problema 
+--------------+-------+--------------+---------------+----------
+(0 filas)
+
+ suma_global_coincide 
+----------------------
+ t
+(1 fila)
+

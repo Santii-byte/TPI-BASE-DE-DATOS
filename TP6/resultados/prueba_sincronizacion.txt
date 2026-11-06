@@ -1,0 +1,6 @@
+BEGIN
+SET
+CREATE FUNCTION
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/parte2/05_prueba_sincronizacion.sql:153: NOTICE:  Prueba de sincronización OK: 9 mutaciones verificadas, 0 desincronizaciones.
+DO
+ROLLBACK

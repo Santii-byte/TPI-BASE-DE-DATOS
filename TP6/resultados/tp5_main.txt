@@ -1,0 +1,81 @@
+SET
+BEGIN
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:29: NOTICE:  trigger "trg_detalle_pedido_resumen" for relation "detalle_pedido" does not exist, skipping
+DROP TRIGGER
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:30: NOTICE:  trigger "trg_pedido_resumen" for relation "pedido" does not exist, skipping
+DROP TRIGGER
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:31: NOTICE:  trigger "trg_pedido_delete_resumen" for relation "pedido" does not exist, skipping
+DROP TRIGGER
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:32: NOTICE:  trigger "trg_producto_resumen" for relation "producto" does not exist, skipping
+DROP TRIGGER
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:34: NOTICE:  function fn_detalle_pedido_resumen() does not exist, skipping
+DROP FUNCTION
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:35: NOTICE:  function fn_pedido_resumen() does not exist, skipping
+DROP FUNCTION
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:36: NOTICE:  function fn_pedido_delete_resumen() does not exist, skipping
+DROP FUNCTION
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:37: NOTICE:  function fn_producto_resumen() does not exist, skipping
+DROP FUNCTION
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:38: NOTICE:  function fn_resumen_aplicar(pg_catalog.int8,date,pg_catalog.numeric) does not exist, skipping
+DROP FUNCTION
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/TP6/tp_desnormalizacion_top_categorias.sql:40: NOTICE:  table "resumen_venta_categoria_dia" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE TRIGGER
+CREATE FUNCTION
+CREATE TRIGGER
+INSERT 0 21959
+COMMIT
+VACUUM
+ANALYZE
+ANALYZE
+ANALYZE
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.44..2.10 rows=5 width=22) (actual time=0.022..0.028 rows=5 loops=1)
+   Buffers: shared hit=13
+   ->  Nested Loop  (cost=0.44..20.40 rows=60 width=22) (actual time=0.022..0.028 rows=5 loops=1)
+         Buffers: shared hit=13
+         ->  Index Only Scan using idx_resumen_fecha_total on resumen_venta_categoria_dia r  (cost=0.29..5.34 rows=60 width=16) (actual time=0.011..0.011 rows=5 loops=1)
+               Index Cond: (fecha = CURRENT_DATE)
+               Heap Fetches: 0
+               Buffers: shared hit=3
+         ->  Memoize  (cost=0.15..0.37 rows=1 width=22) (actual time=0.002..0.002 rows=1 loops=5)
+               Cache Key: r.categoria_id
+               Cache Mode: logical
+               Hits: 0  Misses: 5  Evictions: 0  Overflows: 0  Memory Usage: 1kB
+               Buffers: shared hit=10
+               ->  Index Scan using categoria_pkey on categoria c  (cost=0.14..0.36 rows=1 width=22) (actual time=0.001..0.001 rows=1 loops=5)
+                     Index Cond: (id = r.categoria_id)
+                     Buffers: shared hit=10
+ Planning:
+   Buffers: shared hit=60
+ Planning Time: 1.784 ms
+ Execution Time: 0.055 ms
+(20 filas)
+
+  categoria   | total_vendido 
+--------------+---------------
+ Categoría 36 | 1795685625.50
+ Categoría 59 | 1303279026.43
+ Categoría 52 |  214415704.79
+ Categoría 33 |  195720272.09
+ Categoría 21 |     118407.74
+(5 filas)
+
+ categoria_id | fecha | total_fuente | total_resumen | problema 
+--------------+-------+--------------+---------------+----------
+(0 filas)
+
+ suma_global_coincide 
+----------------------
+ t
+(1 fila)
+

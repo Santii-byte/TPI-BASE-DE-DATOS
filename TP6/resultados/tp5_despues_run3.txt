@@ -1,0 +1,34 @@
+SET
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.44..2.10 rows=5 width=22) (actual time=0.098..0.104 rows=5 loops=1)
+   Buffers: shared hit=13
+   ->  Nested Loop  (cost=0.44..20.40 rows=60 width=22) (actual time=0.096..0.102 rows=5 loops=1)
+         Buffers: shared hit=13
+         ->  Index Only Scan using idx_resumen_fecha_total on resumen_venta_categoria_dia r  (cost=0.29..5.34 rows=60 width=16) (actual time=0.075..0.076 rows=5 loops=1)
+               Index Cond: (fecha = CURRENT_DATE)
+               Heap Fetches: 0
+               Buffers: shared hit=3
+         ->  Memoize  (cost=0.15..0.37 rows=1 width=22) (actual time=0.004..0.004 rows=1 loops=5)
+               Cache Key: r.categoria_id
+               Cache Mode: logical
+               Hits: 0  Misses: 5  Evictions: 0  Overflows: 0  Memory Usage: 1kB
+               Buffers: shared hit=10
+               ->  Index Scan using categoria_pkey on categoria c  (cost=0.14..0.36 rows=1 width=22) (actual time=0.003..0.003 rows=1 loops=5)
+                     Index Cond: (id = r.categoria_id)
+                     Buffers: shared hit=10
+ Planning:
+   Buffers: shared hit=263
+ Planning Time: 3.294 ms
+ Execution Time: 0.151 ms
+(20 filas)
+
+  categoria   | total_vendido 
+--------------+---------------
+ Categoría 36 | 1795685625.50
+ Categoría 59 | 1303279026.43
+ Categoría 52 |  214415704.79
+ Categoría 33 |  195720272.09
+ Categoría 21 |     118407.74
+(5 filas)
+
