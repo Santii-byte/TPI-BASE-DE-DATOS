@@ -1,0 +1,50 @@
+El paginador no se usará.
+      marca       
+------------------
+ INICIO_SIMULACRO
+(1 fila)
+
+ autenticado | usuario_id | rol_usuario 
+-------------+------------+-------------
+ f           |            | 
+(1 fila)
+
+ autenticado | usuario_id | rol_usuario 
+-------------+------------+-------------
+ f           |            | 
+(1 fila)
+
+ autenticado | usuario_id | rol_usuario 
+-------------+------------+-------------
+ f           |            | 
+(1 fila)
+
+ autenticado | usuario_id | rol_usuario 
+-------------+------------+-------------
+ f           |            | 
+(1 fila)
+
+ autenticado | usuario_id | rol_usuario 
+-------------+------------+-------------
+ f           |            | 
+(1 fila)
+
+ autenticado | usuario_id | rol_usuario 
+-------------+------------+-------------
+ f           |            | 
+(1 fila)
+
+ autenticado | usuario_id |   rol_usuario   
+-------------+------------+-----------------
+ t           |          1 | analista_ventas
+(1 fila)
+
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/food-store-tp-u5/sql/simulacro_incidente.sql:47: ERROR:  permission denied for table usuario
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/food-store-tp-u5/sql/simulacro_incidente.sql:50: ERROR:  permission denied to set role "admin_datos"
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/food-store-tp-u5/sql/simulacro_incidente.sql:51: ERROR:  permission denied to grant role "admin_datos"
+DETALLE:  Only roles with the ADMIN option on role "admin_datos" may grant this role.
+     marca     
+---------------
+ FIN_SIMULACRO
+(1 fila)
+

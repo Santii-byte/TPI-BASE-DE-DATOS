@@ -1,0 +1,30 @@
+El paginador no se usará.
+          marca          
+-------------------------
+ INICIO_PRUEBA_AUDITORIA
+(1 fila)
+
+ clientes_visibles 
+-------------------
+             20000
+(1 fila)
+
+BEGIN
+  id   |             email             
+-------+-------------------------------
+ 20002 | prueba.auditoria@example.test
+(1 fila)
+
+INSERT 0 1
+UPDATE 1
+ autenticado | usuario_id | rol_usuario 
+-------------+------------+-------------
+ f           |            | 
+(1 fila)
+
+ROLLBACK
+        marca         
+----------------------
+ FIN_PRUEBA_AUDITORIA
+(1 fila)
+

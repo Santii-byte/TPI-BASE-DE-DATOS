@@ -1,0 +1,174 @@
+El paginador no se usar�.
+El estilo de borde es 2.
+=== A. Consulta de agregación sobre usuario_anon ===
++-------------------+------------+----------+
+|        rol        |  mes_alta  | cantidad |
++-------------------+------------+----------+
+| admin_datos       | 2025-12-01 |      100 |
+| analista_ventas   | 2025-12-01 |      100 |
+| auditor_seguridad | 2025-12-01 |      100 |
+| operador_ventas   | 2025-12-01 |      100 |
+| soporte_cliente   | 2025-12-01 |      100 |
+| admin_datos       | 2026-01-01 |      100 |
+| analista_ventas   | 2026-01-01 |      100 |
+| auditor_seguridad | 2026-01-01 |      100 |
+| operador_ventas   | 2026-01-01 |      100 |
+| soporte_cliente   | 2026-01-01 |      100 |
+| admin_datos       | 2026-02-01 |      100 |
+| analista_ventas   | 2026-02-01 |      100 |
+| auditor_seguridad | 2026-02-01 |      100 |
+| operador_ventas   | 2026-02-01 |      100 |
+| soporte_cliente   | 2026-02-01 |      100 |
+| admin_datos       | 2026-03-01 |      100 |
+| analista_ventas   | 2026-03-01 |      100 |
+| auditor_seguridad | 2026-03-01 |      100 |
+| operador_ventas   | 2026-03-01 |      100 |
+| soporte_cliente   | 2026-03-01 |      100 |
+| admin_datos       | 2026-04-01 |      100 |
+| analista_ventas   | 2026-04-01 |      100 |
+| auditor_seguridad | 2026-04-01 |      100 |
+| operador_ventas   | 2026-04-01 |      100 |
+| soporte_cliente   | 2026-04-01 |      100 |
+| admin_datos       | 2026-05-01 |      100 |
+| analista_ventas   | 2026-05-01 |      100 |
+| auditor_seguridad | 2026-05-01 |      100 |
+| operador_ventas   | 2026-05-01 |      100 |
+| soporte_cliente   | 2026-05-01 |      100 |
+| admin_datos       | 2026-06-01 |      100 |
+| analista_ventas   | 2026-06-01 |      100 |
+| auditor_seguridad | 2026-06-01 |      100 |
+| operador_ventas   | 2026-06-01 |      100 |
+| soporte_cliente   | 2026-06-01 |      100 |
+| admin_datos       | 2026-07-01 |      100 |
+| analista_ventas   | 2026-07-01 |      100 |
+| auditor_seguridad | 2026-07-01 |      100 |
+| operador_ventas   | 2026-07-01 |      100 |
+| soporte_cliente   | 2026-07-01 |      100 |
+| admin_datos       | 2026-08-01 |      100 |
+| analista_ventas   | 2026-08-01 |      100 |
+| auditor_seguridad | 2026-08-01 |      100 |
+| operador_ventas   | 2026-08-01 |      100 |
+| soporte_cliente   | 2026-08-01 |      100 |
+| admin_datos       | 2026-09-01 |      100 |
+| analista_ventas   | 2026-09-01 |      100 |
+| auditor_seguridad | 2026-09-01 |      100 |
+| operador_ventas   | 2026-09-01 |      100 |
+| soporte_cliente   | 2026-09-01 |      100 |
+| admin_datos       | 2026-10-01 |      100 |
+| analista_ventas   | 2026-10-01 |      101 |
+| auditor_seguridad | 2026-10-01 |      100 |
+| operador_ventas   | 2026-10-01 |       99 |
+| soporte_cliente   | 2026-10-01 |      100 |
+| admin_datos       | 2026-11-01 |      100 |
+| analista_ventas   | 2026-11-01 |      100 |
+| auditor_seguridad | 2026-11-01 |      100 |
+| operador_ventas   | 2026-11-01 |      100 |
+| soporte_cliente   | 2026-11-01 |      100 |
++-------------------+------------+----------+
+(60 filas)
+
+=== B. Consulta equivalente sobre usuario (tabla real) ===
++-------------------+------------+----------+
+|        rol        |  mes_alta  | cantidad |
++-------------------+------------+----------+
+| admin_datos       | 2025-12-01 |      100 |
+| analista_ventas   | 2025-12-01 |      100 |
+| auditor_seguridad | 2025-12-01 |      100 |
+| operador_ventas   | 2025-12-01 |      100 |
+| soporte_cliente   | 2025-12-01 |      100 |
+| admin_datos       | 2026-01-01 |      100 |
+| analista_ventas   | 2026-01-01 |      100 |
+| auditor_seguridad | 2026-01-01 |      100 |
+| operador_ventas   | 2026-01-01 |      100 |
+| soporte_cliente   | 2026-01-01 |      100 |
+| admin_datos       | 2026-02-01 |      100 |
+| analista_ventas   | 2026-02-01 |      100 |
+| auditor_seguridad | 2026-02-01 |      100 |
+| operador_ventas   | 2026-02-01 |      100 |
+| soporte_cliente   | 2026-02-01 |      100 |
+| admin_datos       | 2026-03-01 |      100 |
+| analista_ventas   | 2026-03-01 |      100 |
+| auditor_seguridad | 2026-03-01 |      100 |
+| operador_ventas   | 2026-03-01 |      100 |
+| soporte_cliente   | 2026-03-01 |      100 |
+| admin_datos       | 2026-04-01 |      100 |
+| analista_ventas   | 2026-04-01 |      100 |
+| auditor_seguridad | 2026-04-01 |      100 |
+| operador_ventas   | 2026-04-01 |      100 |
+| soporte_cliente   | 2026-04-01 |      100 |
+| admin_datos       | 2026-05-01 |      100 |
+| analista_ventas   | 2026-05-01 |      100 |
+| auditor_seguridad | 2026-05-01 |      100 |
+| operador_ventas   | 2026-05-01 |      100 |
+| soporte_cliente   | 2026-05-01 |      100 |
+| admin_datos       | 2026-06-01 |      100 |
+| analista_ventas   | 2026-06-01 |      100 |
+| auditor_seguridad | 2026-06-01 |      100 |
+| operador_ventas   | 2026-06-01 |      100 |
+| soporte_cliente   | 2026-06-01 |      100 |
+| admin_datos       | 2026-07-01 |      100 |
+| analista_ventas   | 2026-07-01 |      100 |
+| auditor_seguridad | 2026-07-01 |      100 |
+| operador_ventas   | 2026-07-01 |      100 |
+| soporte_cliente   | 2026-07-01 |      100 |
+| admin_datos       | 2026-08-01 |      100 |
+| analista_ventas   | 2026-08-01 |      100 |
+| auditor_seguridad | 2026-08-01 |      100 |
+| operador_ventas   | 2026-08-01 |      100 |
+| soporte_cliente   | 2026-08-01 |      100 |
+| admin_datos       | 2026-09-01 |      100 |
+| analista_ventas   | 2026-09-01 |      100 |
+| auditor_seguridad | 2026-09-01 |      100 |
+| operador_ventas   | 2026-09-01 |      100 |
+| soporte_cliente   | 2026-09-01 |      100 |
+| admin_datos       | 2026-10-01 |      100 |
+| analista_ventas   | 2026-10-01 |      101 |
+| auditor_seguridad | 2026-10-01 |      100 |
+| operador_ventas   | 2026-10-01 |       99 |
+| soporte_cliente   | 2026-10-01 |      100 |
+| admin_datos       | 2026-11-01 |      100 |
+| analista_ventas   | 2026-11-01 |      100 |
+| auditor_seguridad | 2026-11-01 |      100 |
+| operador_ventas   | 2026-11-01 |      100 |
+| soporte_cliente   | 2026-11-01 |      100 |
++-------------------+------------+----------+
+(60 filas)
+
+=== C. Comparación lado a lado (debe devolver 0 filas) ===
++-----+----------+---------------+---------------+
+| rol | mes_alta | cantidad_anon | cantidad_real |
++-----+----------+---------------+---------------+
++-----+----------+---------------+---------------+
+(0 filas)
+
+=== D. Totales por rol (lado a lado) ===
++-------------------+---------------+---------------+
+|        rol        | cantidad_anon | cantidad_real |
++-------------------+---------------+---------------+
+| admin_datos       |          1200 |          1200 |
+| analista_ventas   |          1201 |          1201 |
+| auditor_seguridad |          1200 |          1200 |
+| operador_ventas   |          1199 |          1199 |
+| soporte_cliente   |          1200 |          1200 |
++-------------------+---------------+---------------+
+(5 filas)
+
+=== E. Totales por mes (lado a lado) ===
++------------+---------------+---------------+
+|  mes_alta  | cantidad_anon | cantidad_real |
++------------+---------------+---------------+
+| 2025-12-01 |           500 |           500 |
+| 2026-01-01 |           500 |           500 |
+| 2026-02-01 |           500 |           500 |
+| 2026-03-01 |           500 |           500 |
+| 2026-04-01 |           500 |           500 |
+| 2026-05-01 |           500 |           500 |
+| 2026-06-01 |           500 |           500 |
+| 2026-07-01 |           500 |           500 |
+| 2026-08-01 |           500 |           500 |
+| 2026-09-01 |           500 |           500 |
+| 2026-10-01 |           500 |           500 |
+| 2026-11-01 |           500 |           500 |
++------------+---------------+---------------+
+(12 filas)
+

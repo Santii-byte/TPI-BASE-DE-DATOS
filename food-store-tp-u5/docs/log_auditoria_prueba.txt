@@ -1,0 +1,22 @@
+﻿# Fragmento de log - Parte B: prueba de auditoria
+# PostgreSQL 17 - servidor de desarrollo aislado (puerto 55435)
+# Configuracion: log_connections=on, log_disconnections=on, log_statement=all,
+# log_line_prefix con timestamp, PID, usuario, base, host y aplicacion.
+# Ventana: marcas INICIO_PRUEBA_AUDITORIA / FIN_PRUEBA_AUDITORIA.
+
+2026-11-06 10:39:35.365 -03 [9412] user=[unknown] db=[unknown] host=::1(51517) app=[unknown] LOG:  connection received: host=::1 port=51517
+2026-11-06 10:39:35.366 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=[unknown] LOG:  connection authenticated: user="app_foodstore" method=trust (<PGDATA>/pg_hba.conf:121)
+2026-11-06 10:39:35.366 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=[unknown] LOG:  connection authorized: user=app_foodstore database=foodstore_u5 application_name=psql
+2026-11-06 10:39:35.370 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  statement: SELECT 'INICIO_PRUEBA_AUDITORIA' AS marca;
+2026-11-06 10:39:35.371 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  statement: SELECT count(*) AS clientes_visibles FROM cliente;
+2026-11-06 10:39:35.376 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  statement: BEGIN;
+2026-11-06 10:39:35.376 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  statement: INSERT INTO cliente (nombre, email, telefono)
+	VALUES ('Cliente Prueba Auditoría', 'prueba.auditoria@example.test', '+54 11 4000-0000')
+	RETURNING id, email;
+2026-11-06 10:39:35.377 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  statement: UPDATE cliente
+	   SET telefono = '+54 11 5555-0000'
+	 WHERE email = 'prueba.auditoria@example.test';
+2026-11-06 10:39:35.378 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  statement: SELECT * FROM fn_autenticar('analista1@foodstore.test', 'clave-incorrecta');
+2026-11-06 10:39:35.390 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  statement: ROLLBACK;
+2026-11-06 10:39:35.390 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  statement: SELECT 'FIN_PRUEBA_AUDITORIA' AS marca;
+2026-11-06 10:39:35.390 -03 [9412] user=app_foodstore db=foodstore_u5 host=::1(51517) app=psql LOG:  disconnection: session time: 0:00:00.032 user=app_foodstore database=foodstore_u5 host=::1 port=51517

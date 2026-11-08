@@ -1,0 +1,123 @@
+El paginador no se usar·.
+El estilo de borde es 2.
+=== 1. du : roles y atributos ===
+                                  Lista de roles
++--------------------+-----------------------------------------------------------+
+|   Nombre de rol    |                         Atributos                         |
++--------------------+-----------------------------------------------------------+
+| admin_datos        | No puede conectarse                                       |
+| analista_ventas    | No puede conectarse                                       |
+| app_foodstore      | 20 conexiones                                             |
+| auditor_seguridad  | No puede conectarse                                       |
+| foodstore_owner    | No puede conectarse                                       |
+| operador_ventas    | No puede conectarse                                       |
+| postgres           | Superusuario, Crear rol, Crear BD, Replicacin, Ignora RLS |
+| reportes_foodstore | 10 conexiones                                             |
+| soporte_cliente    | No puede conectarse                                       |
+| soporte_foodstore  | 10 conexiones                                             |
++--------------------+-----------------------------------------------------------+
+
+=== 2. Membres√≠as ===
++--------------------+-------+------------+--------------+-------------------+--------------+
+|        rol         | login | crea_roles | superusuario |     hereda_de     | administra_a |
++--------------------+-------+------------+--------------+-------------------+--------------+
+| admin_datos        | f     | f          | f            | {}                | {}           |
+| analista_ventas    | f     | f          | f            | {}                | {}           |
+| app_foodstore      | t     | f          | f            | {operador_ventas} | {}           |
+| auditor_seguridad  | f     | f          | f            | {}                | {}           |
+| foodstore_owner    | f     | f          | f            | {}                | {}           |
+| operador_ventas    | f     | f          | f            | {}                | {}           |
+| reportes_foodstore | t     | f          | f            | {analista_ventas} | {}           |
+| soporte_cliente    | f     | f          | f            | {}                | {}           |
+| soporte_foodstore  | t     | f          | f            | {soporte_cliente} | {}           |
++--------------------+-------+------------+--------------+-------------------+--------------+
+(9 filas)
+
+=== 3. Privilegios de tabla (information_schema.role_table_grants) ===
++-------------------+----------------+--------------------------------+
+|        rol        |     tabla      |          privilegios           |
++-------------------+----------------+--------------------------------+
+| admin_datos       | cliente        | DELETE, INSERT, SELECT, UPDATE |
+| admin_datos       | detalle_pedido | DELETE, INSERT, SELECT, UPDATE |
+| admin_datos       | pedido         | DELETE, INSERT, SELECT, UPDATE |
+| admin_datos       | producto       | DELETE, INSERT, SELECT, UPDATE |
+| analista_ventas   | cliente        | SELECT                         |
+| analista_ventas   | detalle_pedido | SELECT                         |
+| analista_ventas   | pedido         | SELECT                         |
+| analista_ventas   | producto       | SELECT                         |
+| analista_ventas   | usuario_anon   | SELECT                         |
+| auditor_seguridad | cliente        | SELECT                         |
+| auditor_seguridad | detalle_pedido | SELECT                         |
+| auditor_seguridad | intento_login  | SELECT                         |
+| auditor_seguridad | pedido         | SELECT                         |
+| auditor_seguridad | producto       | SELECT                         |
+| auditor_seguridad | usuario_anon   | SELECT                         |
+| operador_ventas   | cliente        | INSERT, SELECT, UPDATE         |
+| operador_ventas   | detalle_pedido | INSERT, SELECT, UPDATE         |
+| operador_ventas   | pedido         | INSERT, SELECT, UPDATE         |
+| operador_ventas   | producto       | SELECT                         |
++-------------------+----------------+--------------------------------+
+(19 filas)
+
+=== 4. Privilegios de columna sobre usuario ===
++-------------------+---------------+------------+
+|        rol        |    columna    | privilegio |
++-------------------+---------------+------------+
+| analista_ventas   | activo        | SELECT     |
+| analista_ventas   | created_at    | SELECT     |
+| analista_ventas   | email         | SELECT     |
+| analista_ventas   | id            | SELECT     |
+| analista_ventas   | nombre        | SELECT     |
+| analista_ventas   | rol           | SELECT     |
+| analista_ventas   | ultimo_acceso | SELECT     |
+| auditor_seguridad | activo        | SELECT     |
+| auditor_seguridad | created_at    | SELECT     |
+| auditor_seguridad | email         | SELECT     |
+| auditor_seguridad | id            | SELECT     |
+| auditor_seguridad | nombre        | SELECT     |
+| auditor_seguridad | rol           | SELECT     |
+| auditor_seguridad | ultimo_acceso | SELECT     |
++-------------------+---------------+------------+
+(14 filas)
+
+=== 5. Privilegios por defecto de foodstore_owner ===
++-----------------+------+---------------------------------------------------------------------------------------------------------------------------------------------+
+|   propietario   | tipo |                                                                     acl                                                                     |
++-----------------+------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| foodstore_owner | S    | {admin_datos=rU/foodstore_owner,operador_ventas=rU/foodstore_owner}                                                                         |
+| foodstore_owner | r    | {admin_datos=arw/foodstore_owner,operador_ventas=arw/foodstore_owner,analista_ventas=r/foodstore_owner,auditor_seguridad=r/foodstore_owner} |
++-----------------+------+---------------------------------------------------------------------------------------------------------------------------------------------+
+(2 filas)
+
+=== 6. Pruebas negativas de privilegios (matriz booleana) ===
++--------------------------------------------------+-----------+
+|                      prueba                      | resultado |
++--------------------------------------------------+-----------+
+| reportes_foodstore puede leer password_hash      | f         |
+| app_foodstore puede leer password_hash           | f         |
+| reportes_foodstore puede borrar pedidos          | f         |
+| app_foodstore puede borrar pedidos               | f         |
+| admin_datos puede leer usuario                   | f         |
+| admin_datos puede administrar roles (CREATEROLE) | f         |
+| reportes_foodstore puede crear tablas temporales | f         |
+| PUBLIC puede ejecutar fn_autenticar              | f         |
+| existe el rol admin_seguridad (no debe)          | f         |
+| existe el rol seguridad_foodstore (no debe)      | f         |
+| app_foodstore puede ejecutar fn_autenticar       | t         |
++--------------------------------------------------+-----------+
+(11 filas)
+
+=== 7. Prueba de privilegios por defecto en una tabla futura ===
+SET
+psql:C:/Users/tidus/OneDrive/Escritorio/BD/TPI-BASE-DE-DATOS/food-store-tp-u5/sql/verificar_permisos.sql:111: NOTICE:  table "tabla_futura" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+RESET
++--------------+------------------+----------------+-------------+------------+-------------------+
+| analista_lee | operador_inserta | operador_borra | admin_borra | public_lee | public_ejecuta_fn |
++--------------+------------------+----------------+-------------+------------+-------------------+
+| t            | t                | f              | f           | f          | f                 |
++--------------+------------------+----------------+-------------+------------+-------------------+
+(1 fila)
+
+DROP TABLE

@@ -1,0 +1,30 @@
+﻿# Fragmento de log ANONIMIZADO - Parte C: simulacro de incidente
+# PostgreSQL 17 - entorno de desarrollo aislado
+# Datos sinteticos. Mails, contrasenas y ruta del servidor reemplazados.
+
+2026-11-06 10:40:46.615 -03 [7556] user=[unknown] db=[unknown] host=::1(49211) app=[unknown] LOG:  connection received: host=::1 port=49211
+2026-11-06 10:40:46.616 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=[unknown] LOG:  connection authenticated: user="reportes_foodstore" method=trust (<PGDATA>/pg_hba.conf:121)
+2026-11-06 10:40:46.616 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=[unknown] LOG:  connection authorized: user=reportes_foodstore database=foodstore_u5 application_name=psql
+2026-11-06 10:40:46.619 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT 'INICIO_SIMULACRO' AS marca;
+2026-11-06 10:40:46.620 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT * FROM fn_autenticar('usuario.anon.001@example.test', '[SECRETO-REDACTADO]');
+2026-11-06 10:40:46.631 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT * FROM fn_autenticar('usuario.anon.001@example.test', '[SECRETO-REDACTADO]');
+2026-11-06 10:40:46.635 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT * FROM fn_autenticar('usuario.anon.001@example.test', '[SECRETO-REDACTADO]');
+2026-11-06 10:40:46.639 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT * FROM fn_autenticar('usuario.anon.001@example.test', '[SECRETO-REDACTADO]');
+2026-11-06 10:40:46.642 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT * FROM fn_autenticar('usuario.anon.001@example.test', '[SECRETO-REDACTADO]');
+2026-11-06 10:40:46.646 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT * FROM fn_autenticar('usuario.anon.999@example.test', '[SECRETO-REDACTADO]');
+2026-11-06 10:40:46.647 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT * FROM fn_autenticar('usuario.anon.001@example.test', '[SECRETO-REDACTADO]');
+2026-11-06 10:40:46.651 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT id, email, nombre, rol, activo, created_at, ultimo_acceso
+	  FROM usuario
+	 ORDER BY id;
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT password_hash FROM usuario LIMIT 1;
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql ERROR:  permission denied for table usuario
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql STATEMENT:  SELECT password_hash FROM usuario LIMIT 1;
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SET ROLE admin_datos;
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql ERROR:  permission denied to set role "admin_datos"
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql STATEMENT:  SET ROLE admin_datos;
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: GRANT admin_datos TO reportes_foodstore;
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql ERROR:  permission denied to grant role "admin_datos"
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql DETAIL:  Only roles with the ADMIN option on role "admin_datos" may grant this role.
+2026-11-06 10:40:46.677 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql STATEMENT:  GRANT admin_datos TO reportes_foodstore;
+2026-11-06 10:40:46.678 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  statement: SELECT 'FIN_SIMULACRO' AS marca;
+2026-11-06 10:40:46.678 -03 [7556] user=reportes_foodstore db=foodstore_u5 host=::1(49211) app=psql LOG:  disconnection: session time: 0:00:00.068 user=reportes_foodstore database=foodstore_u5 host=::1 port=49211
