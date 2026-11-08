@@ -1,0 +1,16 @@
+﻿VERIFICACION INDEPENDIENTE SOBRE foodstore_restore_test
+Generado: 2026-11-08 15:54:58
+psql exit: 0
+
+t        |   n    
+----------------+--------
+ cliente        |  20000
+ detalle_pedido | 399994
+ pedido         | 200000
+ producto       |  50000
+(4 filas)
+
+ prod_invalidos | det_invalidos | idx_invalidos | fk_y_checks 
+----------------+---------------+---------------+-------------
+              0 |             0 |             0 |           9
+(1 fila)

@@ -1,0 +1,32 @@
+﻿EVIDENCIA DE PRUEBA DE RESTAURACION - FOOD STORE
+Generado: 2026-11-08 15:51:19
+
+Respaldo utilizado : C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.dump
+Fecha/hora respaldo: 2026-11-08 15:50:19
+Tamano respaldo    : 10292285 bytes (9.82 MB)
+Base restaurada    : foodstore_restore_test
+Flags de restore   : --no-owner --no-privileges --exit-on-error
+
+Inicio (antes de createdb): 2026-11-08 15:51:14.065
+Fin validacion            : 2026-11-08 15:51:19.759
+Tiempo total restauracion + validacion (RTO medido): 5.69 s
+Antiguedad del respaldo (RPO observado): 0.02 h
+RPO objetivo: <= 24 h | RTO objetivo: <= 1 h
+
+Conteos por tabla:
+  cliente          esperado=20000    restaurado=20000    OK
+  producto         esperado=50000    restaurado=50000    OK
+  pedido           esperado=200000   restaurado=200000   OK
+  detalle_pedido   esperado=399994   restaurado=399994   OK
+
+Validaciones de integridad:
+  Productos invalidos (precio/stock)       valor=0      OK
+  Detalles invalidos (cantidad/precio)     valor=0      OK
+  Pedidos huerfanos de cliente             valor=0      OK
+  Detalles huerfanos de pedido             valor=0      OK
+  Detalles huerfanos de producto           valor=0      OK
+  Totales de pedido inconsistentes         valor=0      OK
+  Indices invalidos                        valor=0      OK
+  Tablas base presentes                    valor=0      OK
+
+RESULTADO: OK - restauracion y validaciones completas

@@ -1,0 +1,64 @@
+﻿EVIDENCIA DE RESPALDO - FOOD STORE
+Generado: 2026-11-08 15:51:30
+Archivo: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.dump
+Tamano: 10292285 bytes
+pg_restore -l exit: 0
+
+--- Log de respaldo ---
+=== RESPALDO FOOD STORE 20261108_155019 ===
+[2026-11-08 15:50:19] Base de datos: foodstore_u6
+[2026-11-08 15:50:19] Servidor: localhost:55436 usuario=postgres
+[2026-11-08 15:50:19] Destino: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.dump
+cliente|20000
+detalle_pedido|399994
+pedido|200000
+producto|50000
+[2026-11-08 15:50:19] Manifiesto de conteos: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.counts.json
+[2026-11-08 15:50:19] Conteos: cliente=20000 producto=50000 pedido=200000 detalle_pedido=399994
+[2026-11-08 15:50:21] pg_dump finalizo con codigo 0 en 1.9 s
+[2026-11-08 15:50:21] Archivo: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.dump
+[2026-11-08 15:50:21] Tamano: 10292285 bytes (9.82 MB)
+[2026-11-08 15:50:21] RESULTADO: OK - respaldo verificado
+
+--- Indice del dump (pg_restore -l) ---
+;
+; Archive created at 2026-11-08 15:50:19
+;     dbname: foodstore_u6
+;     TOC Entries: 30
+;     Compression: gzip
+;     Dump Version: 1.16-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 17.11
+;     Dumped by pg_dump version: 17.11
+;
+;
+; Selected TOC Entries:
+;
+852; 1247 16386 TYPE public estado_pedido postgres
+855; 1247 16396 TYPE public metodo_pago postgres
+218; 1259 16406 TABLE public cliente postgres
+217; 1259 16405 SEQUENCE public cliente_id_seq postgres
+223; 1259 16442 TABLE public detalle_pedido postgres
+222; 1259 16427 TABLE public pedido postgres
+221; 1259 16426 SEQUENCE public pedido_id_seq postgres
+220; 1259 16416 TABLE public producto postgres
+219; 1259 16415 SEQUENCE public producto_id_seq postgres
+4937; 0 16406 TABLE DATA public cliente postgres
+4942; 0 16442 TABLE DATA public detalle_pedido postgres
+4941; 0 16427 TABLE DATA public pedido postgres
+4939; 0 16416 TABLE DATA public producto postgres
+4949; 0 0 SEQUENCE SET public cliente_id_seq postgres
+4950; 0 0 SEQUENCE SET public pedido_id_seq postgres
+4951; 0 0 SEQUENCE SET public producto_id_seq postgres
+4777; 2606 16414 CONSTRAINT public cliente cliente_email_key postgres
+4779; 2606 16412 CONSTRAINT public cliente cliente_pkey postgres
+4787; 2606 16448 CONSTRAINT public detalle_pedido detalle_pedido_pkey postgres
+4785; 2606 16436 CONSTRAINT public pedido pedido_pkey postgres
+4782; 2606 16425 CONSTRAINT public producto producto_pkey postgres
+4783; 1259 16459 INDEX public idx_pedido_cliente_id postgres
+4780; 1259 16460 INDEX public idx_producto_activo postgres
+4789; 2606 16449 FK CONSTRAINT public detalle_pedido detalle_pedido_pedido_id_fkey postgres
+4790; 2606 16454 FK CONSTRAINT public detalle_pedido detalle_pedido_producto_id_fkey postgres
+4788; 2606 16437 FK CONSTRAINT public pedido pedido_cliente_id_fkey postgres

@@ -1,0 +1,25 @@
+﻿=== PRUEBA DE RESTAURACION 20261108_155113 ===
+[2026-11-08 15:51:14] Respaldo: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.dump
+[2026-11-08 15:51:14] Manifiesto: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.counts.json
+[2026-11-08 15:51:14] Fecha/hora del respaldo: 2026-11-08 15:50:19
+[2026-11-08 15:51:14] Tamano del respaldo: 10292285 bytes (9.82 MB)
+[2026-11-08 15:51:14] Base de prueba: foodstore_restore_test
+[2026-11-08 15:51:14] Paso 1/3: eliminando base de prueba si existe
+NOTICE:  database "foodstore_restore_test" does not exist, skipping
+[2026-11-08 15:51:14] Paso 2/3: creando base de prueba
+[2026-11-08 15:51:14] Paso 3/3: restaurando con pg_restore --no-owner --no-privileges
+[2026-11-08 15:51:17] pg_restore OK en 3.01 s
+[2026-11-08 15:51:17] Conteo cliente: esperado=20000 restaurado=20000 -> OK
+[2026-11-08 15:51:17] Conteo producto: esperado=50000 restaurado=50000 -> OK
+[2026-11-08 15:51:17] Conteo pedido: esperado=200000 restaurado=200000 -> OK
+[2026-11-08 15:51:17] Conteo detalle_pedido: esperado=399994 restaurado=399994 -> OK
+[2026-11-08 15:51:17] Control 'Productos invalidos (precio/stock)': valor=0 -> OK
+[2026-11-08 15:51:17] Control 'Detalles invalidos (cantidad/precio)': valor=0 -> OK
+[2026-11-08 15:51:17] Control 'Pedidos huerfanos de cliente': valor=0 -> OK
+[2026-11-08 15:51:18] Control 'Detalles huerfanos de pedido': valor=0 -> OK
+[2026-11-08 15:51:18] Control 'Detalles huerfanos de producto': valor=0 -> OK
+[2026-11-08 15:51:19] Control 'Totales de pedido inconsistentes': valor=0 -> OK
+[2026-11-08 15:51:19] Control 'Indices invalidos': valor=0 -> OK
+[2026-11-08 15:51:19] Control 'Tablas base presentes': valor=0 -> OK
+[2026-11-08 15:51:19] RESULTADO: OK - RTO=5.69 s RPO=0.02 h
+[2026-11-08 15:51:19] Evidencia: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\docs\evidencia_restauracion.txt

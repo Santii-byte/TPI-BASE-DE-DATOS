@@ -1,0 +1,14 @@
+﻿=== RESPALDO FOOD STORE 20261108_155019 ===
+[2026-11-08 15:50:19] Base de datos: foodstore_u6
+[2026-11-08 15:50:19] Servidor: localhost:55436 usuario=postgres
+[2026-11-08 15:50:19] Destino: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.dump
+cliente|20000
+detalle_pedido|399994
+pedido|200000
+producto|50000
+[2026-11-08 15:50:19] Manifiesto de conteos: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.counts.json
+[2026-11-08 15:50:19] Conteos: cliente=20000 producto=50000 pedido=200000 detalle_pedido=399994
+[2026-11-08 15:50:21] pg_dump finalizo con codigo 0 en 1.9 s
+[2026-11-08 15:50:21] Archivo: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.dump
+[2026-11-08 15:50:21] Tamano: 10292285 bytes (9.82 MB)
+[2026-11-08 15:50:21] RESULTADO: OK - respaldo verificado

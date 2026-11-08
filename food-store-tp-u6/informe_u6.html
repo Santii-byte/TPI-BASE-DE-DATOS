@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Informe final - TP Unidad 6</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #1f2933; line-height: 1.45; max-width: 900px; margin: 24px auto; padding: 0 18px; font-size: 11pt; }
+  h1 { font-size: 20pt; border-bottom: 3px solid #1f6feb; padding-bottom: 8px; margin-bottom: 6px; }
+  h2 { font-size: 14pt; color: #0b3d91; border-bottom: 1px solid #c9d6e8; padding-bottom: 4px; margin-top: 24px; }
+  h3 { font-size: 12pt; color: #123c69; margin-top: 18px; }
+  p { margin: 7px 0; text-align: justify; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 14px; font-size: 9.5pt; }
+  th, td { border: 1px solid #9fb3c8; padding: 5px 7px; vertical-align: top; }
+  th { background: #e8f0fb; text-align: left; }
+  tr:nth-child(even) td { background: #f7fafd; }
+  code { background: #eef2f7; padding: 1px 4px; border-radius: 3px; font-family: Consolas, monospace; font-size: 9.5pt; }
+  pre { background: #f4f6f8; border-left: 4px solid #1f6feb; padding: 10px 12px; overflow-x: auto; page-break-inside: avoid; }
+  pre code { background: none; padding: 0; }
+  ul, ol { margin: 6px 0 10px 22px; }
+  li { margin: 3px 0; }
+  hr { border: none; border-top: 1px solid #c9d6e8; margin: 18px 0; }
+  a { color: #1f6feb; }
+  @media print { body { margin: 0; max-width: none; } h2 { page-break-after: avoid; } table, pre { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+<h1>Informe final - TP Unidad 6</h1>
+<p><strong>Food Store - Respaldo, monitoreo, mantenimiento y restauracion</strong></p>
+<ul>
+<li><strong>Integrantes:</strong> Franco Rios y Santino Barone</li>
+<li><strong>Motor:</strong> PostgreSQL 17.11</li>
+<li><strong>Base operada:</strong> <code>foodstore_u6</code></li>
+<li><strong>Fecha de ejecucion:</strong> 2026-11-08</li>
+<li><strong>Herramientas:</strong> OpenCode, psql, pg_dump, pg_restore, PowerShell 5.1</li>
+</ul>
+<hr>
+<h2>1. Resumen ejecutivo</h2>
+<p>Se respaldo la base <code>foodstore_u6</code> en formato custom, se ejecuto un health check de 8 controles, se hizo una revision de mantenimiento y se restauro el respaldo en la base aislada <code>foodstore_restore_test</code>. Todas las validaciones finales pasaron.</p>
+<table>
+<tr><th>Indicador</th><th>Resultado</th></tr>
+<tr><td>Fecha/hora del respaldo</td><td>2026-11-08 15:50:19</td></tr>
+<tr><td>Archivo de respaldo</td><td><code>backups/foodstore_u6_20261108_155019.dump</code></td></tr>
+<tr><td>Tamano del respaldo</td><td>10.292.285 bytes (9,82 MB)</td></tr>
+<tr><td>Duracion de <code>pg_dump</code></td><td>1,9 s (codigo 0)</td></tr>
+<tr><td>Health check inicial</td><td>1 FAIL: 46,34 % de tuplas muertas en <code>pedido</code></td></tr>
+<tr><td>Health check posterior</td><td>8/8 controles OK</td></tr>
+<tr><td>Tiempo total restauracion + validacion (RTO)</td><td><strong>5,69 s</strong></td></tr>
+<tr><td>Antiguedad del respaldo al validar (RPO observado)</td><td><strong>0,02 h</strong> (~1 min)</td></tr>
+<tr><td>RPO/RTO objetivo</td><td>&lt;= 24 h / &lt;= 1 h</td></tr>
+<tr><td>Validacion de conteos e integridad</td><td>12/12 OK</td></tr>
+</table>
+<hr>
+<h2>2. Especificacion y automatizacion</h2>
+<p>La especificacion completa esta en <code>SPEC_U6.md</code>. Resumen:</p>
+<table>
+<tr><th>Actividad</th><th>Frecuencia</th><th>Script</th><th>Condicion de terminacion</th></tr>
+<tr><td>Respaldo completo</td><td>Diaria 02:00</td><td><code>backup_foodstore.ps1</code></td><td>Codigo 0 solo si <code>pg_dump</code> retorna 0 y el <code>.dump</code> existe y no esta vacio</td></tr>
+<tr><td>Health check</td><td>Diaria 08:00</td><td><code>health_check.sql</code></td><td>Codigo 0 si ningun control queda en <code>FAIL</code>; el bloque <code>DO</code> lanza excepcion si hay fallos</td></tr>
+<tr><td>Mantenimiento</td><td>Semanal lunes 03:00</td><td><code>maintenance.sql</code></td><td>Codigo 0 si <code>VACUUM (ANALYZE)</code> y <code>ANALYZE</code> terminan y no hay indices invalidos</td></tr>
+<tr><td>Prueba de restauracion</td><td>Semanal lunes 04:00</td><td><code>restore_test.ps1</code></td><td>Codigo 0 solo si <code>createdb</code>, <code>pg_restore --no-owner --no-privileges</code> y todas las validaciones pasan</td></tr>
+</table>
+<p>La automatizacion se implementa con el Programador de tareas de Windows (o <code>cron</code> en Linux) invocando los scripts. Los scripts no contienen contrasenas: usan <code>PGPASSWORD</code>, <code>pgpass.conf</code> o autenticacion local.</p>
+<hr>
+<h2>3. Respaldo</h2>
+<p><strong>Comando equivalente:</strong></p>
+<pre><code>pg_dump -h localhost -p 55436 -U postgres -d foodstore_u6 `
+  -Fc --no-password -f backups/foodstore_u6_20261108_155019.dump</code></pre>
+<p><strong>Resultado real:</strong></p>
+<ul>
+<li>Archivo custom generado: <code>foodstore_u6_20261108_155019.dump</code>.</li>
+<li>Tamano: 10.292.285 bytes (9,82 MB).</li>
+<li><code>pg_dump</code> finalizo con codigo <strong>0</strong> en <strong>1,9 s</strong>.</li>
+<li>Log: <code>logs/backup_20261108_155019.log</code>.</li>
+<li>Manifiesto de conteos pre-respaldo:</li>
+</ul>
+<p>  <code>backups/foodstore_u6_20261108_155019.counts.json</code>.</p>
+<ul>
+<li>Conteos registrados: cliente 20.000, producto 50.000, pedido 200.000,</li>
+</ul>
+<p>  detalle_pedido 399.994.</p>
+<ul>
+<li>Verificacion del dump con <code>pg_restore -l</code>: codigo <strong>0</strong></li>
+</ul>
+<p>  (<code>docs/evidencia_respaldo.txt</code>).</p>
+<ul>
+<li><strong>Prueba negativa:</strong> ejecutar el respaldo contra una base inexistente</li>
+</ul>
+<p>  devolvio codigo <strong>1</strong> y dejo el error registrado   (<code>docs/evidencia_respaldo_fallo.txt</code>).</p>
+<p>El script valida que el archivo exista y no este vacio; si <code>pg_dump</code> falla, borra el archivo parcial, registra el error y devuelve codigo 1.</p>
+<hr>
+<h2>4. Health check</h2>
+<p>Se ejecutaron 8 controles (<code>health_check.sql</code>):</p>
+<table>
+<tr><th>#</th><th>Control</th><th>Umbral</th><th>Resultado inicial</th><th>Resultado posterior</th></tr>
+<tr><td>1</td><td>Tamano de la base</td><td>&lt;= 10 GB</td><td>94 MB OK</td><td>94 MB OK</td></tr>
+<tr><td>2</td><td>Conexiones totales</td><td>&lt;= 80 % de <code>max_connections</code></td><td>1 OK</td><td>1 OK</td></tr>
+<tr><td>3</td><td>Consultas activas &gt; 5 min</td><td>&lt;= 2</td><td>0 OK</td><td>0 OK</td></tr>
+<tr><td>4</td><td>Sesiones <code>idle in transaction</code></td><td>&lt;= 5</td><td>0 OK</td><td>0 OK</td></tr>
+<tr><td>5</td><td>Peor porcentaje de tuplas muertas</td><td>&lt; 20 %</td><td><strong>46,34 % FAIL</strong></td><td>0,00 % OK</td></tr>
+<tr><td>6</td><td>Indices invalidos</td><td>= 0</td><td>0 OK</td><td>0 OK</td></tr>
+<tr><td>7</td><td>Locks esperando</td><td>= 0</td><td>0 OK</td><td>0 OK</td></tr>
+<tr><td>8</td><td>Tablas sin <code>ANALYZE</code></td><td>= 0</td><td>WARN: tabla temporal del chequeo</td><td>0 OK</td></tr>
+</table>
+<p>Evidencias:</p>
+<ul>
+<li><code>docs/evidencia_health_check_antes.txt</code> (detecta el problema).</li>
+<li><code>docs/evidencia_health_check.txt</code> (post-mantenimiento, 8/8 OK).</li>
+</ul>
+<p>El control 8 excluye explicitamente la tabla temporal del propio health check para no generar un falso WARN.</p>
+<hr>
+<h2>5. Mantenimiento</h2>
+<p><strong>Estado observado antes de la accion:</strong> la tabla <code>pedido</code> tenia 172.684 tuplas muertas sobre 372.684 (46,34 %), producto del <code>UPDATE</code> masivo que recalculo los totales durante la carga. El autovacuum no habia actuado aun.</p>
+<p><strong>Accion ejecutada:</strong></p>
+<pre><code>VACUUM (ANALYZE, VERBOSE) cliente;
+VACUUM (ANALYZE, VERBOSE) producto;
+VACUUM (ANALYZE, VERBOSE) pedido;
+VACUUM (ANALYZE, VERBOSE) detalle_pedido;</code></pre>
+<p><code>VACUUM (ANALYZE)</code> no bloquea lecturas ni escrituras y actualiza estadisticas. En <code>pedido</code> se reclamaron 172.684 identificadores muertos en 1.667 paginas de indice (51,66 % del total). El estado posterior mostro <strong>0 tuplas muertas</strong> en las cuatro tablas.</p>
+<p><strong>Ajuste preventivo:</strong> se configuro autovacuum especifico para la tabla de mayor volumen:</p>
+<pre><code>ALTER TABLE detalle_pedido SET (
+    autovacuum_vacuum_scale_factor = 0.05,
+    autovacuum_analyze_scale_factor = 0.02
+);</code></pre>
+<p>Con los valores por defecto (<code>scale_factor = 0.20</code>) harian falta ~80.000 tuplas muertas para disparar el vacuum; con 0,05 se dispara antes.</p>
+<p><strong>No se uso <code>VACUUM FULL</code>:</strong> toma <code>ACCESS EXCLUSIVE</code>, reescribe la tabla completa y bloquea ventas. Queda reservado a incidentes puntuales de bloat extrema, nunca como tarea periodica.</p>
+<p>Evidencia: <code>docs/evidencia_mantenimiento.txt</code> (codigo de salida 0).</p>
+<hr>
+<h2>6. Prueba de restauracion</h2>
+<p><strong>Procedimiento:</strong></p>
+<ol>
+<li>Se tomo el respaldo mas reciente.</li>
+<li>Se elimino, si existia, <code>foodstore_restore_test</code>.</li>
+<li>Se creo la base con <code>createdb</code>.</li>
+<li>Se restauro con:</li>
+</ol>
+<pre><code>pg_restore -h localhost -p 55436 -U postgres -d foodstore_restore_test `
+  --no-owner --no-privileges --exit-on-error `
+  backups/foodstore_u6_20261108_155019.dump</code></pre>
+<ol>
+<li>Se validaron conteos e integridad contra el manifiesto pre-respaldo.</li>
+</ol>
+<p><strong>Tiempos reales:</strong></p>
+<ul>
+<li>Inicio (antes de <code>createdb</code>): 2026-11-08 15:51:14.065.</li>
+<li>Fin de validacion: 2026-11-08 15:51:19.759.</li>
+<li><code>pg_restore</code>: 3,01 s.</li>
+<li><strong>Tiempo total restauracion + validacion (RTO medido): 5,69 s.</strong></li>
+<li><strong>Antiguedad del respaldo al validar (RPO observado): 0,02 h.</strong></li>
+<li>Objetivos: RPO &lt;= 24 h, RTO &lt;= 1 h. Ambos cumplidos.</li>
+</ul>
+<p><strong>Validacion de conteos:</strong></p>
+<table>
+<tr><th>Tabla</th><th>Esperado</th><th>Restaurado</th><th>Estado</th></tr>
+<tr><td>cliente</td><td>20.000</td><td>20.000</td><td>OK</td></tr>
+<tr><td>producto</td><td>50.000</td><td>50.000</td><td>OK</td></tr>
+<tr><td>pedido</td><td>200.000</td><td>200.000</td><td>OK</td></tr>
+<tr><td>detalle_pedido</td><td>399.994</td><td>399.994</td><td>OK</td></tr>
+</table>
+<p><strong>Validacion de integridad (todos en 0):</strong></p>
+<ul>
+<li>Productos invalidos (<code>precio &lt; 0</code> o <code>stock &lt; 0</code>): 0.</li>
+<li>Detalles invalidos (<code>cantidad &lt;= 0</code> o <code>precio_unitario &lt;= 0</code>): 0.</li>
+<li>Pedidos huerfanos de cliente: 0.</li>
+<li>Detalles huerfanos de pedido: 0.</li>
+<li>Detalles huerfanos de producto: 0.</li>
+<li>Totales de pedido inconsistentes con la suma de detalles: 0.</li>
+<li>Indices invalidos: 0.</li>
+<li>Tablas base faltantes: 0.</li>
+</ul>
+<p>Evidencia: <code>docs/evidencia_restauracion.txt</code> y <code>logs/restore_20261108_155113.log</code>.</p>
+<hr>
+<h2>7. Problema real detectado y resolucion</h2>
+<p><strong>Problema:</strong> el health check inicial fallo con <strong>46,34 % de tuplas muertas en <code>pedido</code></strong> (172.684 tuplas) inmediatamente despues de la carga masiva. La causa fue el <code>UPDATE</code> que recalculo el total de 172.684 pedidos, que dejo versiones anteriores de las filas pendientes de reclamar. Sin intervencion, ese bloat degrada el rendimiento y desperdicia espacio.</p>
+<p><strong>Resolucion:</strong> se ejecuto <code>VACUUM (ANALYZE)</code> sobre las cuatro tablas y se verifico el estado posterior: 0 tuplas muertas y 8/8 controles OK. Ademas se bajaron los umbrales de autovacuum de <code>detalle_pedido</code> para prevenir recurrencia en la tabla de mayor volumen.</p>
+<p><strong>Problema secundario de implementacion:</strong> la primera corrida de <code>restore_test.ps1</code> aborto porque PowerShell 5.1 trataba un <code>NOTICE</code> de <code>dropdb</code> en <code>stderr</code> como error terminante (<code>$ErrorActionPreference = "Stop"</code>). Se corrigio usando <code>Continue</code> y controlando explicitamente los codigos de salida de cada herramienta. La corrida posterior paso completa.</p>
+<hr>
+<h2>8. Mejoras concretas</h2>
+<ol>
+<li><strong>Implementada:</strong> autovacuum con umbrales reducidos en <code>detalle_pedido</code></li>
+</ol>
+<p>   (<code>0.05</code> / <code>0.02</code>) para que actue antes en la tabla de mayor volumen.</p>
+<ol>
+<li><strong>Recomendada:</strong> programar las cuatro tareas y centralizar alertas cuando el</li>
+</ol>
+<p>   codigo de salida sea distinto de 0 (correo o webhook).</p>
+<ol>
+<li><strong>Recomendada:</strong> copiar los <code>.dump</code> a almacenamiento externo cifrado y</li>
+</ol>
+<p>   aplicar retencion 7 diarios + 4 semanales.</p>
+<ol>
+<li><strong>Recomendada:</strong> tomar los conteos dentro de la misma instantanea del dump</li>
+</ol>
+<p>   (<code>pg_dump --snapshot</code>) o en una ventana sin escrituras, para eliminar la    pequena carrera entre manifiesto y respaldo.</p>
+<ol>
+<li><strong>Recomendada:</strong> agregar <code>pg_verifybackup</code>/<code>pg_restore -l</code> como control</li>
+</ol>
+<p>   previo obligatorio antes de cada restauracion.</p>
+<ol>
+<li><strong>Recomendada:</strong> probar la restauracion en otro servidor o contenedor, no</li>
+</ol>
+<p>   solo en el mismo cluster, para validar un escenario real de desastre.</p>
+<hr>
+<h2>9. Asistencia de OpenCode y verificacion</h2>
+<p>OpenCode se uso para:</p>
+<ul>
+<li>Relevar el esquema y los datos disponibles en el repositorio.</li>
+<li>Redactar <code>SPEC_U6.md</code>, los scripts y este informe.</li>
+<li>Ejecutar realmente el flujo completo en un cluster temporal de PostgreSQL 17</li>
+</ul>
+<p>  en el puerto 55436: crear <code>foodstore_u6</code>, cargar esquema y datos, respaldar,   ejecutar health check, mantenimiento y restaurar.</p>
+<ul>
+<li>Detectar y corregir dos fallas reales durante la ejecucion: la ambiguedad de</li>
+</ul>
+<p>  <code>max_dead_pct</code> en el health check y el tratamiento de <code>stderr</code> en PowerShell.</p>
+<ul>
+<li>Verificar resultados leyendo las salidas de <code>psql</code>, <code>pg_dump</code> y <code>pg_restore</code>,</li>
+</ul>
+<p>  no solo asumiendo que los scripts funcionaban.</p>
+<p><strong>Verificacion independiente realizada por el agente:</strong></p>
+<ul>
+<li><code>pg_dump</code> codigo 0 y archivo no vacio.</li>
+<li><code>pg_restore -l</code> codigo 0.</li>
+<li>Health check inicial con 1 FAIL real y posterior con 0 FAIL / 0 WARN.</li>
+<li><code>maintenance.sql</code> codigo 0 y 0 tuplas muertas despues.</li>
+<li><code>restore_test.ps1</code> codigo 0, 4/4 conteos y 8/8 controles de integridad OK.</li>
+<li>RTO y RPO calculados a partir de marcas de tiempo reales.</li>
+</ul>
+<p>Las respuestas y decisiones de la IA quedan documentadas en <code>cambios/DUIA_TP_U6.md</code>. No se realizaron commits: los archivos quedan para revision y commit del equipo.</p>
+<p>La version imprimible de este informe esta en <code>informe_u6.html</code>; desde un navegador se puede usar <strong>Imprimir &gt; Guardar como PDF</strong> para obtener el PDF.</p>
+<hr>
+<h2>10. Evidencias</h2>
+<table>
+<tr><th>Archivo</th><th>Contenido</th></tr>
+<tr><td><code>backups/foodstore_u6_20261108_155019.dump</code></td><td>Respaldo custom real</td></tr>
+<tr><td><code>backups/foodstore_u6_20261108_155019.counts.json</code></td><td>Conteos pre-respaldo</td></tr>
+<tr><td><code>logs/backup_20261108_155019.log</code></td><td>Log del respaldo, codigo 0</td></tr>
+<tr><td><code>logs/restore_20261108_155113.log</code></td><td>Log de restauracion y validaciones</td></tr>
+<tr><td><code>docs/evidencia_respaldo.txt</code></td><td>Metadata + <code>pg_restore -l</code> + log</td></tr>
+<tr><td><code>docs/evidencia_respaldo_fallo.txt</code></td><td>Prueba negativa: base inexistente, codigo 1</td></tr>
+<tr><td><code>docs/evidencia_health_check_antes.txt</code></td><td>Health check con el FAIL real</td></tr>
+<tr><td><code>docs/evidencia_health_check.txt</code></td><td>Health check posterior 8/8 OK</td></tr>
+<tr><td><code>docs/evidencia_mantenimiento.txt</code></td><td>Revision de autovacuum y VACUUM</td></tr>
+<tr><td><code>docs/evidencia_restauracion.txt</code></td><td>RTO/RPO, conteos e integridad</td></tr>
+<tr><td><code>docs/verificacion_independiente_restauracion.txt</code></td><td>Consulta directa a la base restaurada: 4 conteos, 0 invalidos y 9 FK/CHECK</td></tr>
+</table>
+
+</body>
+</html>

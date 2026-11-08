@@ -1,0 +1,42 @@
+﻿=== HEALTH CHECK FOOD STORE ===
+            momento            |     base     | usuario  | tamano_base | max_conexiones 
+-------------------------------+--------------+----------+-------------+----------------
+ 2026-11-08 15:53:44.680401-03 | foodstore_u6 | postgres | 94 MB       | 100
+(1 fila)
+
+ state  | conexiones 
+--------+------------
+ active |          1
+(1 fila)
+
+ pid | usename | state | wait_event_type | wait_event | duracion | consulta 
+-----+---------+-------+-----------------+------------+----------+----------
+(0 filas)
+
+    relname     | tamano_total | n_live_tup | n_dead_tup | pct_tuplas_muertas |          last_vacuum          | last_autovacuum |         last_analyze          | last_autoanalyze | seq_scan | idx_scan 
+----------------+--------------+------------+------------+--------------------+-------------------------------+-----------------+-------------------------------+------------------+----------+----------
+ cliente        | 3776 kB      |      20000 |          0 |               0.00 | 2026-11-08 15:50:51.859918-03 |                 | 2026-11-08 15:50:51.89354-03  |                  |        7 |   372684
+ detalle_pedido | 39 MB        |     399994 |          0 |               0.00 | 2026-11-08 15:50:52.152097-03 |                 | 2026-11-08 15:50:52.206382-03 |                  |        7 |   400000
+ pedido         | 38 MB        |     200000 |          0 |               0.00 | 2026-11-08 15:50:52.060236-03 |                 | 2026-11-08 15:50:52.1251-03   |                  |        7 |   572679
+ producto       | 5192 kB      |      50000 |          0 |               0.00 | 2026-11-08 15:50:51.901083-03 |                 | 2026-11-08 15:50:51.961235-03 |                  |        8 |   399994
+(4 filas)
+
+DROP TABLE
+psql:health_check.sql:55: NOTICE:  table "resultado_health" does not exist, skipping
+CREATE TABLE
+INSERT 0 8
+                control                | valor  |             umbral             | estado |                          detalle                           
+---------------------------------------+--------+--------------------------------+--------+------------------------------------------------------------
+ 1. Tamano de la base                  | 94 MB  | <= 10 GB                       | OK     | 98621107 bytes
+ 2. Conexiones totales                 | 1      | <= 80 (80% de max_connections) | OK     | Consultas activas: 0
+ 3. Consultas activas largas (> 5 min) | 0      | <= 2                           | OK     | Excluye la sesion del health check
+ 4. Sesiones idle in transaction       | 0      | <= 5                           | OK     | Transacciones abiertas que retienen locks
+ 5. Peor porcentaje de tuplas muertas  | 0.00 % | < 20 %                         | OK     | Justifica VACUUM (ANALYZE) en maintenance.sql
+ 6. Indices invalidos                  | 0      | = 0                            | OK     | Un indice invalido no debe usarse para consultas
+ 7. Locks esperando                    | 0      | = 0                            | OK     | Solicitudes de lock no concedidas
+ 8. Tablas sin ANALYZE                 | 0      | = 0                            | OK     | Sin estadisticas el planificador puede elegir malos planes
+(8 filas)
+
+psql:health_check.sql:172: NOTICE:  Resumen health check: 0 FAIL, 0 WARN
+DO
+=== FIN HEALTH CHECK ===

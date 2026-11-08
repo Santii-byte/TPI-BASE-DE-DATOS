@@ -1,0 +1,11 @@
+﻿{
+    "timestamp":  "2026-11-08T15:50:19.3568296-03:00",
+    "database":  "foodstore_u6",
+    "dump_file":  "C:\\Users\\tidus\\OneDrive\\Escritorio\\BD\\TPI-BASE-DE-DATOS\\food-store-tp-u6\\backups\\foodstore_u6_20261108_155019.dump",
+    "counts":  {
+                   "cliente":  20000,
+                   "detalle_pedido":  399994,
+                   "pedido":  200000,
+                   "producto":  50000
+               }
+}

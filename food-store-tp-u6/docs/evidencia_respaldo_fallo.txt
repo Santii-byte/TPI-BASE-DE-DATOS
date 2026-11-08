@@ -1,0 +1,5 @@
+﻿[2026-11-08 15:52:59] Base de datos: base_inexistente_u6
+[2026-11-08 15:52:59] Servidor: localhost:55436 usuario=postgres
+[2026-11-08 15:52:59] Destino: C:\Users\tidus\AppData\Local\Temp\u6_backup_fail\backups\foodstore_u6_20261108_155259.dump
+[2026-11-08 15:52:59] ERROR: No se pudieron leer los conteos (psql=2)
+[2026-11-08 15:52:59] RESULTADO: FALLO (codigo de salida 1)

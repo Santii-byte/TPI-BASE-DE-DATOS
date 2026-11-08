@@ -1,0 +1,7 @@
+﻿=== PRUEBA DE RESTAURACION 20261108_155101 ===
+[2026-11-08 15:51:01] Respaldo: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.dump
+[2026-11-08 15:51:01] Manifiesto: C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\food-store-tp-u6\backups\foodstore_u6_20261108_155019.counts.json
+[2026-11-08 15:51:01] Fecha/hora del respaldo: 2026-11-08 15:50:19
+[2026-11-08 15:51:01] Tamano del respaldo: 10292285 bytes (9.82 MB)
+[2026-11-08 15:51:01] Base de prueba: foodstore_restore_test
+[2026-11-08 15:51:01] Paso 1/3: eliminando base de prueba si existe
