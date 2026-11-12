@@ -1,0 +1,329 @@
+==============================================================================
+C2 - EL SERVIDOR SUBE EL PRECIO DE LA LECHE
+==============================================================================
+BEGIN
+UPDATE 1
+COMMIT
+ id |      nombre      | precio_centavos | stock | disponible | eliminado 
+----+------------------+-----------------+-------+------------+-----------
+  2 | Leche entera 1 L |          105000 |    36 | t          | f
+(1 fila)
+
+==============================================================================
+C2 - EXPORTAR NUEVA INSTANTANEA
+==============================================================================
+COPY 16
+ filas_exportadas |     fecha_copia     
+------------------+---------------------
+               16 | 2026-11-12T09:16:16
+(1 fila)
+
+==============================================================================
+C2 - IMPORTAR Y EVALUAR SOLICITUD CON PRECIO VIEJO
+==============================================================================
+CSV importado en snapshot_raw: 16 filas
+
+===== importar_snapshot.sql =====
+filas_servidor | filas_cache | catalogo_visible | fecha_copia
+---------------+-------------+------------------+------------
+16 | 16 | 13 | 2026-11-12T09:16:16
+(1 fila)
+
+===== c2_solicitud_conflicto.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000011 | 88888888-8888-4888-8888-888888888888 | PENDIENTE | 
+(1 fila)
+
+===== semaforo.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000001 | 11111111-1111-4111-8111-111111111111 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000002 | 22222222-2222-4222-8222-222222222222 | CONFLICTO | precio cambiado: id 4: visto 400000, servidor 450000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000003 | 33333333-3333-4333-8333-333333333333 | RECHAZADO | stock insuficiente: id 11: pedidas 10, stock 8;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000004 | 44444444-4444-4444-8444-444444444444 | RECHAZADO | producto dado de baja: id 15 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000005 | 55555555-5555-4555-8555-555555555555 | RECHAZADO | sin stock: id 13 sin stock;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000006 | 66666666-6666-4666-8666-666666666666 | RECHAZADO | producto no disponible: id 14 no disponible;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000007 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000011 | 88888888-8888-4888-8888-888888888888 | CONFLICTO | precio cambiado: id 2: visto 95000, servidor 105000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000009 | 99999999-9999-4999-8999-999999999999 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000010 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+cccccccc-cccc-4ccc-8ccc-000000000001 | cccccccc-cccc-4ccc-8ccc-cccccccccccc | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+(12 filas)
+
+==============================================================================
+C2 - EL CLIENTE ACEPTA: ACTUALIZAR PRECIO Y NUEVA SOLICITUD
+==============================================================================
+
+===== c2_aceptar_precio.sql =====
+id_local | producto_id | precio_centavos_visto | solicitud_uuid | estado
+---------+-------------+-----------------------+----------------+-------
+88888888-8888-4888-8888-888888888888 | 2 | 105000 | aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | SIMULADO_APROBADO
+88888888-8888-4888-8888-888888888888 | 2 | 105000 | aaaaaaaa-aaaa-4aaa-8aaa-000000000011 | CONFLICTO
+88888888-8888-4888-8888-888888888888 | 2 | 105000 | aaaaaaaa-aaaa-4aaa-8aaa-000000000012 | PENDIENTE
+(3 filas)
+
+===== semaforo.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000001 | 11111111-1111-4111-8111-111111111111 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000002 | 22222222-2222-4222-8222-222222222222 | CONFLICTO | precio cambiado: id 4: visto 400000, servidor 450000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000003 | 33333333-3333-4333-8333-333333333333 | RECHAZADO | stock insuficiente: id 11: pedidas 10, stock 8;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000004 | 44444444-4444-4444-8444-444444444444 | RECHAZADO | producto dado de baja: id 15 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000005 | 55555555-5555-4555-8555-555555555555 | RECHAZADO | sin stock: id 13 sin stock;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000006 | 66666666-6666-4666-8666-666666666666 | RECHAZADO | producto no disponible: id 14 no disponible;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000007 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000011 | 88888888-8888-4888-8888-888888888888 | CONFLICTO | precio cambiado: id 2: visto 95000, servidor 105000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000012 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000009 | 99999999-9999-4999-8999-999999999999 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000010 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+cccccccc-cccc-4ccc-8ccc-000000000001 | cccccccc-cccc-4ccc-8ccc-cccccccccccc | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+(13 filas)
+
+==============================================================================
+RESTAURAR PRECIO DEL SERVIDOR
+==============================================================================
+BEGIN
+UPDATE 1
+COMMIT
+ id |      nombre      | precio_centavos 
+----+------------------+-----------------
+  2 | Leche entera 1 L |           95000
+(1 fila)
+
+==============================================================================
+EXPORTAR INSTANTANEA PARA C3
+==============================================================================
+COPY 16
+ filas_exportadas |     fecha_copia     
+------------------+---------------------
+               16 | 2026-11-12T09:16:17
+(1 fila)
+
+==============================================================================
+C3 - 5 MANZANAS CON STOCK 4: RECHAZADO
+==============================================================================
+CSV importado en snapshot_raw: 16 filas
+
+===== importar_snapshot.sql =====
+filas_servidor | filas_cache | catalogo_visible | fecha_copia
+---------------+-------------+------------------+------------
+16 | 16 | 13 | 2026-11-12T09:16:17
+(1 fila)
+
+===== c3_solicitud_stock.sql =====
+solicitud_uuid | producto_id | cantidad | stock | estado
+---------------+-------------+----------+-------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000013 | 12 | 5 | 4 | PENDIENTE
+(1 fila)
+
+===== semaforo.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000001 | 11111111-1111-4111-8111-111111111111 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000002 | 22222222-2222-4222-8222-222222222222 | CONFLICTO | precio cambiado: id 4: visto 400000, servidor 450000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000003 | 33333333-3333-4333-8333-333333333333 | RECHAZADO | stock insuficiente: id 11: pedidas 10, stock 8;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000004 | 44444444-4444-4444-8444-444444444444 | RECHAZADO | producto dado de baja: id 15 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000005 | 55555555-5555-4555-8555-555555555555 | RECHAZADO | sin stock: id 13 sin stock;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000006 | 66666666-6666-4666-8666-666666666666 | RECHAZADO | producto no disponible: id 14 no disponible;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000007 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000013 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000011 | 88888888-8888-4888-8888-888888888888 | CONFLICTO | precio cambiado: id 2: visto 95000, servidor 105000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000012 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000009 | 99999999-9999-4999-8999-999999999999 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000010 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+cccccccc-cccc-4ccc-8ccc-000000000001 | cccccccc-cccc-4ccc-8ccc-cccccccccccc | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+(14 filas)
+
+==============================================================================
+C4 - BAJA LOGICA DEL PRODUCTO 6
+==============================================================================
+BEGIN
+UPDATE 1
+COMMIT
+ id |     nombre      | stock | disponible | eliminado 
+----+-----------------+-------+------------+-----------
+  6 | Yerba mate 1 kg |    15 | t          | t
+(1 fila)
+
+==============================================================================
+C4 - EXPORTAR INSTANTANEA CON LA BAJA
+==============================================================================
+COPY 16
+ filas_exportadas |     fecha_copia     
+------------------+---------------------
+               16 | 2026-11-12T09:16:18
+(1 fila)
+
+==============================================================================
+C4 - IMPORTAR, CONSERVAR ITEM Y EVALUAR
+==============================================================================
+CSV importado en snapshot_raw: 16 filas
+
+===== importar_snapshot.sql =====
+filas_servidor | filas_cache | catalogo_visible | fecha_copia
+---------------+-------------+------------------+------------
+16 | 16 | 12 | 2026-11-12T09:16:18
+(1 fila)
+
+===== c4_solicitud_baja.sql =====
+control | filas_item
+--------+-----------
+item local conservado | 1
+(1 fila)
+control | filas_visibles
+--------+---------------
+catalogo disponible | 0
+(1 fila)
+control | filas_cache_eliminadas | filas_snapshot_eliminadas
+--------+------------------------+--------------------------
+cache conserva la baja | 1 | 1
+(1 fila)
+
+===== semaforo.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000001 | 11111111-1111-4111-8111-111111111111 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000002 | 22222222-2222-4222-8222-222222222222 | CONFLICTO | precio cambiado: id 4: visto 400000, servidor 450000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000003 | 33333333-3333-4333-8333-333333333333 | RECHAZADO | stock insuficiente: id 11: pedidas 10, stock 8;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000004 | 44444444-4444-4444-8444-444444444444 | RECHAZADO | producto dado de baja: id 15 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000005 | 55555555-5555-4555-8555-555555555555 | RECHAZADO | sin stock: id 13 sin stock;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000006 | 66666666-6666-4666-8666-666666666666 | RECHAZADO | producto no disponible: id 14 no disponible;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000007 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000013 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000011 | 88888888-8888-4888-8888-888888888888 | CONFLICTO | precio cambiado: id 2: visto 95000, servidor 105000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000012 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000009 | 99999999-9999-4999-8999-999999999999 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000014 | 99999999-9999-4999-8999-999999999999 | RECHAZADO | producto dado de baja: id 6 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000010 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+cccccccc-cccc-4ccc-8ccc-000000000001 | cccccccc-cccc-4ccc-8ccc-cccccccccccc | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+(15 filas)
+
+==============================================================================
+C4 - RESTAURAR PRODUCTO 6 EN EL SERVIDOR
+==============================================================================
+BEGIN
+UPDATE 1
+COMMIT
+ id |     nombre      | eliminado 
+----+-----------------+-----------
+  6 | Yerba mate 1 kg | f
+(1 fila)
+
+==============================================================================
+C5 - EXPORTAR INSTANTANEA SIN CAMBIOS
+==============================================================================
+COPY 16
+ filas_exportadas |     fecha_copia     
+------------------+---------------------
+               16 | 2026-11-12T09:16:18
+(1 fila)
+
+==============================================================================
+C5 - BORRADOR SIN CAMBIOS: SIMULADO_APROBADO
+==============================================================================
+CSV importado en snapshot_raw: 16 filas
+
+===== importar_snapshot.sql =====
+filas_servidor | filas_cache | catalogo_visible | fecha_copia
+---------------+-------------+------------------+------------
+16 | 16 | 13 | 2026-11-12T09:16:18
+(1 fila)
+
+===== c5_solicitud_sin_cambios.sql =====
+solicitud_uuid | producto_id | cantidad | precio_centavos_visto | precio_centavos | stock | estado
+---------------+-------------+----------+-----------------------+-----------------+-------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000015 | 7 | 1 | 110000 | 110000 | 40 | PENDIENTE
+(1 fila)
+
+===== semaforo.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000001 | 11111111-1111-4111-8111-111111111111 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000002 | 22222222-2222-4222-8222-222222222222 | CONFLICTO | precio cambiado: id 4: visto 400000, servidor 450000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000003 | 33333333-3333-4333-8333-333333333333 | RECHAZADO | stock insuficiente: id 11: pedidas 10, stock 8;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000004 | 44444444-4444-4444-8444-444444444444 | RECHAZADO | producto dado de baja: id 15 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000005 | 55555555-5555-4555-8555-555555555555 | RECHAZADO | sin stock: id 13 sin stock;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000006 | 66666666-6666-4666-8666-666666666666 | RECHAZADO | producto no disponible: id 14 no disponible;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000007 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000013 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000011 | 88888888-8888-4888-8888-888888888888 | CONFLICTO | precio cambiado: id 2: visto 95000, servidor 105000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000012 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000009 | 99999999-9999-4999-8999-999999999999 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000014 | 99999999-9999-4999-8999-999999999999 | RECHAZADO | producto dado de baja: id 6 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000010 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000015 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+cccccccc-cccc-4ccc-8ccc-000000000001 | cccccccc-cccc-4ccc-8ccc-cccccccccccc | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+(16 filas)
+
+==============================================================================
+C6 - REENVIAR LA MISMA SOLICITUD (MISMO UUID)
+==============================================================================
+
+===== c6_reenvio.sql =====
+ERROR ESPERADO O REAL: UNIQUE constraint failed: cola_sync.solicitud_uuid
+control | filas | estado
+--------+-------+-------
+C6 reenvio | 1 | SIMULADO_APROBADO
+(1 fila)
+
+===== semaforo.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000001 | 11111111-1111-4111-8111-111111111111 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000002 | 22222222-2222-4222-8222-222222222222 | CONFLICTO | precio cambiado: id 4: visto 400000, servidor 450000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000003 | 33333333-3333-4333-8333-333333333333 | RECHAZADO | stock insuficiente: id 11: pedidas 10, stock 8;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000004 | 44444444-4444-4444-8444-444444444444 | RECHAZADO | producto dado de baja: id 15 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000005 | 55555555-5555-4555-8555-555555555555 | RECHAZADO | sin stock: id 13 sin stock;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000006 | 66666666-6666-4666-8666-666666666666 | RECHAZADO | producto no disponible: id 14 no disponible;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000007 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000013 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000011 | 88888888-8888-4888-8888-888888888888 | CONFLICTO | precio cambiado: id 2: visto 95000, servidor 105000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000012 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000009 | 99999999-9999-4999-8999-999999999999 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000014 | 99999999-9999-4999-8999-999999999999 | RECHAZADO | producto dado de baja: id 6 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000010 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000015 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+cccccccc-cccc-4ccc-8ccc-000000000001 | cccccccc-cccc-4ccc-8ccc-cccccccccccc | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+(16 filas)
+
+==============================================================================
+VERIFICACION FINAL EN POSTGRESQL: PEDIDOS Y STOCK SIN CAMBIOS
+==============================================================================
+ pedidos_base | pedidos | detalles_base | detalles | stock_base | stock |             veredicto              
+--------------+---------+---------------+----------+------------+-------+------------------------------------
+            3 |       3 |             4 |        4 |        295 |   295 | VERDE: pedidos y stock sin cambios
+(1 fila)
+
+  id  |               id_local               |  forma_pago   | total_centavos |   estado   | lineas 
+------+--------------------------------------+---------------+----------------+------------+--------
+ 1001 | f0000000-0000-4000-8000-000000001001 | EFECTIVO      |         680000 | CONFIRMADO |      2
+ 1002 | f0000000-0000-4000-8000-000000001002 | TARJETA       |         450000 | CONFIRMADO |      1
+ 1003 | f0000000-0000-4000-8000-000000001003 | TRANSFERENCIA |         330000 | CONFIRMADO |      1
+(3 filas)
+
+ id |           nombre           | precio_centavos | stock | disponible | eliminado 
+----+----------------------------+-----------------+-------+------------+-----------
+  1 | Pan de campo 500 g         |          180000 |    24 | t          | f
+  2 | Leche entera 1 L           |           95000 |    36 | t          | f
+  3 | Cafe molido 250 g          |          320000 |    18 | t          | f
+  4 | Queso cremoso 400 g        |          450000 |    12 | t          | f
+  5 | Huevos color x 12          |          280000 |    20 | t          | f
+  6 | Yerba mate 1 kg            |          390000 |    15 | t          | f
+  7 | Azucar 1 kg                |          110000 |    40 | t          | f
+  8 | Aceite de girasol 1.5 L    |          250000 |    22 | t          | f
+  9 | Fideos tallarin 500 g      |           85000 |    30 | t          | f
+ 10 | Arroz largo fino 1 kg      |          135000 |    25 | t          | f
+ 11 | Tomate perita 1 kg         |          120000 |     8 | t          | f
+ 12 | Manzana roja 1 kg          |          140000 |     4 | t          | f
+ 13 | Agua mineral 2 L           |           70000 |     0 | t          | f
+ 14 | Galletitas de agua 300 g   |           60000 |    18 | f          | f
+ 15 | Mate cocido 25 saquitos    |           75000 |    14 | t          | t
+ 16 | Mermelada de durazno 454 g |          210000 |     9 | t          | f
+(16 filas)

@@ -1,0 +1,35 @@
+=== TABLAS Y VISTA ===
+              Listado de relaciones
+ Esquema |       Nombre        | Tipo  |   Due    
+---------+---------------------+-------+----------
+ public  | control_instalacion | tabla | postgres
+ public  | detalle_pedido      | tabla | postgres
+ public  | pedido              | tabla | postgres
+ public  | producto            | tabla | postgres
+ public  | tienda              | tabla | postgres
+(5 filas)
+
+=== VISTA v_snapshot_movil (primeras filas) ===
+ id |       nombre        | categoria | precio_centavos | stock | disponible | eliminado |     fecha_copia     
+----+---------------------+-----------+-----------------+-------+------------+-----------+---------------------
+  1 | Pan de campo 500 g  | Panaderia |          180000 |    24 | t          | f         | 2026-11-12T09:16:44
+  2 | Leche entera 1 L    | Lacteos   |           95000 |    36 | t          | f         | 2026-11-12T09:16:44
+  3 | Cafe molido 250 g   | Almacen   |          320000 |    18 | t          | f         | 2026-11-12T09:16:44
+  4 | Queso cremoso 400 g | Lacteos   |          450000 |    12 | t          | f         | 2026-11-12T09:16:44
+  5 | Huevos color x 12   | Frescos   |          280000 |    20 | t          | f         | 2026-11-12T09:16:44
+(5 filas)
+
+=== CONTEO POR TABLA ===
+     tabla      | count 
+----------------+-------
+ producto       |    16
+ pedido         |     3
+ detalle_pedido |     4
+ tienda         |     1
+(4 filas)
+
+=== CONTROL DE INSTALACION ===
+ pedidos_base | detalles_base | stock_base |        registrado_en         
+--------------+---------------+------------+------------------------------
+            3 |             4 |        295 | 2026-11-12 09:14:55.38043-03
+(1 fila)

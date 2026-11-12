@@ -1,0 +1,37 @@
+=== CREACION DEL ESQUEMA SQLITE ===
+
+===== schema_sqlite.sql =====
+objeto | tablas
+-------+-------
+esquema_sqlite | 6
+(1 fila)
+
+=== IMPORTACION + DATOS + SEMAFORO INICIAL ===
+CSV importado en snapshot_raw: 16 filas
+
+===== importar_snapshot.sql =====
+filas_servidor | filas_cache | catalogo_visible | fecha_copia
+---------------+-------------+------------------+------------
+16 | 16 | 13 | 2026-11-12T09:16:44
+(1 fila)
+
+===== datos_prueba.sql =====
+borradores | items | pendientes
+-----------+-------+-----------
+10 | 11 | 10
+(1 fila)
+
+===== semaforo.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000001 | 11111111-1111-4111-8111-111111111111 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000002 | 22222222-2222-4222-8222-222222222222 | CONFLICTO | precio cambiado: id 4: visto 400000, servidor 450000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000003 | 33333333-3333-4333-8333-333333333333 | RECHAZADO | stock insuficiente: id 11: pedidas 10, stock 8;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000004 | 44444444-4444-4444-8444-444444444444 | RECHAZADO | producto dado de baja: id 15 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000005 | 55555555-5555-4555-8555-555555555555 | RECHAZADO | sin stock: id 13 sin stock;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000006 | 66666666-6666-4666-8666-666666666666 | RECHAZADO | producto no disponible: id 14 no disponible;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000007 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000009 | 99999999-9999-4999-8999-999999999999 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000010 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+(10 filas)

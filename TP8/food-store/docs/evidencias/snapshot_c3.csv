@@ -1,0 +1,17 @@
+id,nombre,categoria,precio_centavos,stock,disponible,eliminado,fecha_copia
+1,Pan de campo 500 g,Panaderia,180000,24,t,f,2026-11-12T09:13:39
+2,Leche entera 1 L,Lacteos,95000,36,t,f,2026-11-12T09:13:39
+3,Cafe molido 250 g,Almacen,320000,18,t,f,2026-11-12T09:13:39
+4,Queso cremoso 400 g,Lacteos,450000,12,t,f,2026-11-12T09:13:39
+5,Huevos color x 12,Frescos,280000,20,t,f,2026-11-12T09:13:39
+6,Yerba mate 1 kg,Almacen,390000,15,t,f,2026-11-12T09:13:39
+7,Azucar 1 kg,Almacen,110000,40,t,f,2026-11-12T09:13:39
+8,Aceite de girasol 1.5 L,Almacen,250000,22,t,f,2026-11-12T09:13:39
+9,Fideos tallarin 500 g,Almacen,85000,30,t,f,2026-11-12T09:13:39
+10,Arroz largo fino 1 kg,Almacen,135000,25,t,f,2026-11-12T09:13:39
+11,Tomate perita 1 kg,Verduleria,120000,8,t,f,2026-11-12T09:13:39
+12,Manzana roja 1 kg,Fruteria,140000,4,t,f,2026-11-12T09:13:39
+13,Agua mineral 2 L,Bebidas,70000,0,t,f,2026-11-12T09:13:39
+14,Galletitas de agua 300 g,Almacen,60000,18,f,f,2026-11-12T09:13:39
+15,Mate cocido 25 saquitos,Almacen,75000,14,t,t,2026-11-12T09:13:39
+16,Mermelada de durazno 454 g,Almacen,210000,9,t,f,2026-11-12T09:13:39

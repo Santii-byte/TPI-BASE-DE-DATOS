@@ -1,0 +1,13 @@
+=== EXPORTACION psql (\copy) ===
+COPY 16
+ filas_exportadas |     fecha_copia     
+------------------+---------------------
+               16 | 2026-11-12T09:16:44
+(1 fila)
+
+=== PRIMERAS LINEAS DEL CSV ===
+id,nombre,categoria,precio_centavos,stock,disponible,eliminado,fecha_copia
+1,Pan de campo 500 g,Panaderia,180000,24,t,f,2026-11-12T09:16:44
+2,Leche entera 1 L,Lacteos,95000,36,t,f,2026-11-12T09:16:44
+3,Cafe molido 250 g,Almacen,320000,18,t,f,2026-11-12T09:16:44
+4,Queso cremoso 400 g,Lacteos,450000,12,t,f,2026-11-12T09:16:44

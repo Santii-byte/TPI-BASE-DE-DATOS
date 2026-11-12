@@ -1,0 +1,31 @@
+ pedidos_base | pedidos | detalles_base | detalles | stock_base | stock |             veredicto              
+--------------+---------+---------------+----------+------------+-------+------------------------------------
+            3 |       3 |             4 |        4 |        295 |   295 | VERDE: pedidos y stock sin cambios
+(1 fila)
+
+  id  |               id_local               |  forma_pago   | total_centavos |   estado   | lineas 
+------+--------------------------------------+---------------+----------------+------------+--------
+ 1001 | f0000000-0000-4000-8000-000000001001 | EFECTIVO      |         680000 | CONFIRMADO |      2
+ 1002 | f0000000-0000-4000-8000-000000001002 | TARJETA       |         450000 | CONFIRMADO |      1
+ 1003 | f0000000-0000-4000-8000-000000001003 | TRANSFERENCIA |         330000 | CONFIRMADO |      1
+(3 filas)
+
+ id |           nombre           | precio_centavos | stock | disponible | eliminado 
+----+----------------------------+-----------------+-------+------------+-----------
+  1 | Pan de campo 500 g         |          180000 |    24 | t          | f
+  2 | Leche entera 1 L           |           95000 |    36 | t          | f
+  3 | Cafe molido 250 g          |          320000 |    18 | t          | f
+  4 | Queso cremoso 400 g        |          450000 |    12 | t          | f
+  5 | Huevos color x 12          |          280000 |    20 | t          | f
+  6 | Yerba mate 1 kg            |          390000 |    15 | t          | f
+  7 | Azucar 1 kg                |          110000 |    40 | t          | f
+  8 | Aceite de girasol 1.5 L    |          250000 |    22 | t          | f
+  9 | Fideos tallarin 500 g      |           85000 |    30 | t          | f
+ 10 | Arroz largo fino 1 kg      |          135000 |    25 | t          | f
+ 11 | Tomate perita 1 kg         |          120000 |     8 | t          | f
+ 12 | Manzana roja 1 kg          |          140000 |     4 | t          | f
+ 13 | Agua mineral 2 L           |           70000 |     0 | t          | f
+ 14 | Galletitas de agua 300 g   |           60000 |    18 | f          | f
+ 15 | Mate cocido 25 saquitos    |           75000 |    14 | t          | t
+ 16 | Mermelada de durazno 454 g |          210000 |     9 | t          | f
+(16 filas)

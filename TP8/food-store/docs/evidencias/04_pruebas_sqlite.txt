@@ -1,0 +1,56 @@
+
+===== pruebas_sqlite.sql =====
+seq | name | file
+----+------+-----
+0 | main | C:\Users\tidus\OneDrive\Escritorio\BD\TPI-BASE-DE-DATOS\TP8\food-store\docs\evidencias\pruebas.db
+(1 fila)
+prueba | productos_visibles
+-------+-------------------
+C1 catalogo local | 13
+(1 fila)
+id | nombre | precio_centavos | stock
+---+--------+-----------------+------
+8 | Aceite de girasol 1.5 L | 250000 | 22
+10 | Arroz largo fino 1 kg | 135000 | 25
+7 | Azucar 1 kg | 110000 | 40
+3 | Cafe molido 250 g | 320000 | 18
+9 | Fideos tallarin 500 g | 85000 | 30
+(5 filas)
+prueba | items | solicitudes
+-------+-------+------------
+borrador completo | 2 | 1
+(1 fila)
+prueba | borradores | items | solicitudes
+-------+------------+-------+------------
+rollback | 0 | 0 | 0
+(1 fila)
+ERROR ESPERADO O REAL: CHECK constraint failed: cantidad > 0
+prueba | borradores | items
+-------+------------+------
+C7a cantidad 0 | 0 | 0
+(1 fila)
+ERROR ESPERADO O REAL: FOREIGN KEY constraint failed
+prueba | borradores | items
+-------+------------+------
+C7b producto inexistente | 0 | 0
+(1 fila)
+prueba | pedidos | items | solicitudes
+-------+---------+-------+------------
+resumen | 11 | 13 | 11
+(1 fila)
+
+===== semaforo.sql =====
+solicitud_uuid | id_local | estado | motivo
+---------------+----------+--------+-------
+aaaaaaaa-aaaa-4aaa-8aaa-000000000001 | 11111111-1111-4111-8111-111111111111 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000002 | 22222222-2222-4222-8222-222222222222 | CONFLICTO | precio cambiado: id 4: visto 400000, servidor 450000;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000003 | 33333333-3333-4333-8333-333333333333 | RECHAZADO | stock insuficiente: id 11: pedidas 10, stock 8;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000004 | 44444444-4444-4444-8444-444444444444 | RECHAZADO | producto dado de baja: id 15 dado de baja;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000005 | 55555555-5555-4555-8555-555555555555 | RECHAZADO | sin stock: id 13 sin stock;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000006 | 66666666-6666-4666-8666-666666666666 | RECHAZADO | producto no disponible: id 14 no disponible;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000007 | 77777777-7777-4777-8777-777777777777 | RECHAZADO | stock insuficiente: id 12: pedidas 5, stock 4;
+aaaaaaaa-aaaa-4aaa-8aaa-000000000008 | 88888888-8888-4888-8888-888888888888 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000009 | 99999999-9999-4999-8999-999999999999 | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+aaaaaaaa-aaaa-4aaa-8aaa-000000000010 | bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+cccccccc-cccc-4ccc-8ccc-000000000001 | cccccccc-cccc-4ccc-8ccc-cccccccccccc | SIMULADO_APROBADO | precio, stock y disponibilidad coinciden
+(11 filas)
